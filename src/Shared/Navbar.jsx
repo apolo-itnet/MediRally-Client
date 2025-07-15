@@ -99,11 +99,6 @@ const Navbar = () => {
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow bg-base-100 rounded-box size-82 flex flex-col items-start justify-between "
               >
                 <Link to="/">
-                  {/* <img
-                    src={"https://i.postimg.cc/0jyV0sJ7/Lost-Trace-Logo.png"}
-                    alt="Lost Trace Logo"
-                    className="w-22 flex justify-center items-center lg:hidden pb-4  "
-                  /> */}
                   <h1 className="text-2xl font-bold zain">Medi Rally</h1>
                 </Link>
 
@@ -113,11 +108,11 @@ const Navbar = () => {
                       <NavLink
                         to={link.href}
                         className={({ isActive }) =>
-                          `flex items-center gap-2 px-2 py-2 rounded-md transition-all ease-in-out duration-300 
+                          `flex items-center gap-2 px-3 py-3 relative  after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-zinc-400                     after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] rounded-md transition-all ease-in-out duration-300 
                       ${
                         isActive
-                          ? "bg-teal-700 text-base-100"
-                          : "hover:bg-teal-800 hover:text-base-100"
+                          ? "active"
+                          : "hover:after:origin-bottom-left hover:after:scale-x-100 after:origin-bottom-right after:scale-x-0"
                       } `
                         }
                       >
@@ -139,22 +134,27 @@ const Navbar = () => {
                 ) : (
                   <div className="md:hidden gap-4 flex">
                     <Link to="/signin">
-                      <SecondaryBtn label={"Sign In"}></SecondaryBtn>
+                      <PrimaryBtn
+                        label="Sign In"
+                        altLabel="Now!"
+                        icon={<ArrowRight className="w-4 h-4 text-white" />}
+                        iconBg="bg-fuchsia-800"
+                        className="font-bold "
+                      />
                     </Link>
                     <Link to="/signup">
-                      <PrimaryBtn label={"Sign Up"}></PrimaryBtn>
+                      <PrimaryBtn
+                        label="Sign Up"
+                        altLabel="Now!"
+                        icon={<ArrowRight className="w-4 h-4" />}
+                        className="font-bold"
+                      />
                     </Link>
                   </div>
                 )}
               </ul>
             </div>
-            {/* Logo */}
-            <Link to="/">
-              {/* <img
-                src={"https://i.postimg.cc/0jyV0sJ7/Lost-Trace-Logo.png"}
-                alt="Lost Trace Logo"
-                className="w-22 lg:flex hidden "
-              /> */}
+            <Link to="/" className="hidden md:flex">
               <h1 className="text-2xl font-bold zain">Medi Rally</h1>
             </Link>
           </div>
