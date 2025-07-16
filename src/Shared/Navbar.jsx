@@ -18,7 +18,7 @@ import { motion } from "framer-motion";
 import { slideDown } from "../Utility/animation";
 import { toastError, toastSuccess } from "../Utility/toastmsg";
 import { Toaster } from "react-hot-toast";
-import { ArrowRight, Contact, Users } from "lucide-react";
+import { ArrowRight, Contact, LayoutDashboard, Users } from "lucide-react";
 import Loader from "./Loader/Loader";
 import { AuthContext } from "../Contexts/AuthContexts";
 import SecondaryBtn from "./Button/SecondaryBtn";
@@ -58,16 +58,14 @@ const Navbar = () => {
   ];
 
   const privateLinks = [
-    { label: "Add Post", href: "/add-post", icon: <FaPlus /> },
-    { label: "My Post", href: "/my-posted-list", icon: <FaList /> },
-    { label: "Feedback", href: "/feedback", icon: <FaCheckCircle /> },
+    { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
   ];
 
   return (
     <div>
       {isLoading && <Loader />}
       <Toaster reverseOrder={false} />
-      <div className="flex justify-between items-center py-2 border-b border-gray-100 res-pad nunito">
+      <div className="flex justify-between items-center py-2 bg-zinc-100 border-b border-gray-100 res-pad nunito">
         <motion.div
           variants={slideDown(0.2)}
           initial="initial"
@@ -76,6 +74,7 @@ const Navbar = () => {
         >
           {/* Mobile Menu */}
           <div className="md:navbar-start lg:flex-1 ">
+            
             <div className="dropdown">
               <label tabIndex={0} className="btn btn-ghost lg:hidden">
                 <svg
@@ -96,10 +95,17 @@ const Navbar = () => {
 
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow bg-base-100 rounded-box size-82 flex flex-col items-start justify-between "
+                className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow bg-base-100 rounded-box lg:size-82 size-40 flex flex-col items-start justify-between "
               >
                 <Link to="/">
-                  <h1 className="text-2xl font-bold zain">Medi Rally</h1>
+                  <img
+                    src="https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"
+                    alt="logo"
+                    className="w-8 h-8"
+                  />
+                  <h1 className="text-2xl font-bold zain text-pink-700">
+                    Medi <span className="text-sky-600">Rally</span>
+                  </h1>
                 </Link>
 
                 <ul className="text-sm font-medium flex flex-col items-start gap-3">
@@ -123,7 +129,7 @@ const Navbar = () => {
                 </ul>
 
                 {user ? (
-                  <div className="w-full bg-teal-700 text-base-100 p-2 rounded-md flex hover:bg-teal-800 transition-colors ease-in-out duration-300">
+                  <div className="w-full text-base-100 p-2 rounded-md flex  transition-colors ease-in-out duration-300">
                     <button
                       onClick={handleSignout}
                       className="flex items-center gap-2"
@@ -134,11 +140,9 @@ const Navbar = () => {
                 ) : (
                   <div className="md:hidden gap-4 flex">
                     <Link to="/signin">
-                      <PrimaryBtn
+                      <SecondaryBtn
                         label="Sign In"
-                        altLabel="Now!"
                         icon={<ArrowRight className="w-4 h-4 text-white" />}
-                        iconBg="bg-fuchsia-800"
                         className="font-bold "
                       />
                     </Link>
@@ -154,8 +158,16 @@ const Navbar = () => {
                 )}
               </ul>
             </div>
+
             <Link to="/" className="hidden md:flex">
-              <h1 className="text-2xl font-bold zain">Medi Rally</h1>
+              <img
+                src="https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"
+                alt="logo"
+                className="w-8 h-8"
+              />
+              <h1 className="text-3xl font-bold zain text-pink-700 px-2">
+                Medi <span className="text-sky-600">Rally</span>
+              </h1>
             </Link>
           </div>
 
@@ -208,18 +220,18 @@ const Navbar = () => {
                 </label>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box size-60 flex flex-col items-start justify-center gap-2"
+                  className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow rounded-box w-50 flex flex-col items-start justify-center gap-2 poppins"
                 >
                   {privateLinks.map((link, index) => (
-                    <li key={index} className="">
+                    <li key={index} className="w-full">
                       <NavLink
                         to={link.href}
                         className={({ isActive }) =>
-                          `flex items-center px-3 py-3 rounded-md transition-all ease-in-out duration-300 
+                          `text-xs flex items-center gap-2 px-3 py-3 relative  after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-zinc-400 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] rounded-md transition-all ease-in-out duration-300 
                       ${
                         isActive
-                          ? "bg-teal-700 text-base-100"
-                          : "hover:bg-teal-800 hover:text-base-100"
+                          ? "active"
+                          : "hover:after:origin-bottom-left hover:after:scale-x-100 after:origin-bottom-right after:scale-x-0"
                       } `
                         }
                         onClick={() => setIsDropdownOpen(false)}
@@ -231,7 +243,7 @@ const Navbar = () => {
                   <li className="w-full">
                     <button
                       onClick={handleSignout}
-                      className="w-full flex items-center gap-2 border border-teal-700 px-3 py-3 rounded-md"
+                      className="text-xs w-full flex items-center gap-2 border border-zinc-400 px-3 py-3 rounded-md"
                     >
                       <FaSignOutAlt /> Signout
                     </button>
@@ -241,12 +253,10 @@ const Navbar = () => {
             ) : (
               <div className="md:flex gap-4 hidden">
                 <Link to="/signin">
-                  <PrimaryBtn
+                  <SecondaryBtn
                     label="Sign In"
-                    altLabel="Now!"
-                    icon={<ArrowRight className="w-4 h-4 text-white" />}
-                    iconBg="bg-fuchsia-800"
-                    className="font-bold "
+                    icon={<ArrowRight />}
+                    className="font-bold"
                   />
                 </Link>
                 <Link to="/signup">

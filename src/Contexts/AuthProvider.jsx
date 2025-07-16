@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const createUser = (email, password) => {
+  const registerUser = (email, password) => {
     setLoading(false);
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -74,10 +74,11 @@ const AuthProvider = ({ children }) => {
 
   const authContextValue = {
     loading,
-    createUser,
+    registerUser,
     signIn,
     signInWithGoogle,
     user,
+    updateUserProfile,
     logOut,
     getToken,
   };
