@@ -1,12 +1,20 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { UserRoundPen, Mail, LockKeyhole, Eye, EyeOff, Loader2 } from "lucide-react";
+import {
+  UserRoundPen,
+  Mail,
+  LockKeyhole,
+  Eye,
+  EyeOff,
+  Loader2,
+} from "lucide-react";
 import axios from "axios";
 import { toastError, toastSuccess } from "../Utility/toastmsg";
 import useAuth from "../Hooks/useAuth";
 import SecondaryBtn from "../Shared/Button/SecondaryBtn";
 import { useLocation, useNavigate } from "react-router";
+import { slideLeft, slideRight } from "../Utility/animation";
 
 const SignUp = () => {
   const { registerUser, updateUserProfile } = useAuth();
@@ -22,7 +30,39 @@ const SignUp = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm();
+
+  // const onSubmit = async (data) => {
+  //   const { fullName, email, password, image, role } = data;
+  //   setLoading(true);
+
+  //   const formData = new FormData();
+  //   formData.append("image", image[0]);
+
+  //   try {
+  //     const imgbbRes = await axios.post(
+  //       `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
+  //       formData
+  //     );
+  //     const photoURL = imgbbRes.data.data.url;
+
+  //     if (!registerUser || !updateUserProfile) {
+  //       throw new Error("registerUser function not defined in AuthContext");
+  //     }
+
+  //     const userCredential = await registerUser(email, password);
+  //     await updateUserProfile(fullName, photoURL);
+
+  //     toastSuccess("Successfully Signed Up!");
+  //     reset();
+  //     navigate(form, { replace: true });
+  //   } catch (error) {
+  //     toastError(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const onSubmit = async (data) => {
     const { fullName, email, password, image, role } = data;
@@ -32,22 +72,30 @@ const SignUp = () => {
     formData.append("image", image[0]);
 
     try {
+      // Upload image to imgbb
       const imgbbRes = await axios.post(
         `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
         formData
       );
       const photoURL = imgbbRes.data.data.url;
 
-      if (!registerUser || !updateUserProfile) {
-        throw new Error("registerUser function not defined in AuthContext");
-      }
-
+      // Register user in Firebase
       const userCredential = await registerUser(email, password);
       await updateUserProfile(fullName, photoURL);
 
+      // Send user info to MongoDB
+      const saveUser = {
+        name: fullName,
+        email: email,
+        photo: photoURL,
+        role: role || "user",
+      };
+
+      await axios.post(`${import.meta.env.VITE_API_URL}/users`, saveUser);
+
       toastSuccess("Successfully Signed Up!");
       reset();
-      navigate(form, { replace: true });
+      navigate(location.state?.from || "/", { replace: true });
     } catch (error) {
       toastError(error.message);
     } finally {
@@ -64,9 +112,7 @@ const SignUp = () => {
     <div className="h-screen[calc(100vh-80px)] flex flex-col md:flex-row items-center justify-center gap-10 px-4 py-12 bg-base-100 nunito">
       {/* Left Content */}
       <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
+        {...slideRight(0)}
         className="text-center md:text-left md:w-1/2 space-y-5"
       >
         <h2 className="text-4xl font-bold text-primary">Create Your Account</h2>
@@ -78,10 +124,8 @@ const SignUp = () => {
 
       {/* Signup Form */}
       <motion.form
+        {...slideLeft(0.2)}
         onSubmit={handleSubmit(onSubmit)}
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
         className="md:w-1/2 bg-white p-6 rounded-xl shadow-lg space-y-4 w-full max-w-md"
       >
         {/* Full Name */}

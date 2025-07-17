@@ -74,7 +74,7 @@ const Navbar = () => {
         >
           {/* Mobile Menu */}
           <div className="md:navbar-start lg:flex-1 ">
-            
+
             <div className="dropdown">
               <label tabIndex={0} className="btn btn-ghost lg:hidden">
                 <svg
@@ -95,7 +95,7 @@ const Navbar = () => {
 
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow bg-base-100 rounded-box lg:size-82 size-40 flex flex-col items-start justify-between "
+                className="dropdown-content mt-3 z-[1] p-4 shadow bg-base-100 rounded-box w-full h-full flex flex-col items-start justify-between"
               >
                 <Link to="/">
                   <img
