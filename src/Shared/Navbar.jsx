@@ -52,7 +52,7 @@ const Navbar = () => {
 
   const navLinks = [
     { label: "Home", href: "/", icon: <FaHome /> },
-    { label: "Browse Posts", href: "/all-posts", icon: <FaSearch /> },
+    { label: "Available Camps", href: "/all-camps", icon: <FaSearch /> },
     { label: "About Us", href: "/about", icon: <HiOutlineUsers /> },
     { label: "Contact", href: "/contact", icon: <RiContactsBook3Line /> },
   ];
@@ -75,7 +75,7 @@ const Navbar = () => {
           {/* Mobile Menu */}
           <div className="md:navbar-start lg:flex-1 ">
 
-            <div className="dropdown">
+            <div className="dropdown relative">
               <label tabIndex={0} className="btn btn-ghost lg:hidden">
                 <svg
                   className="h-5 w-5"
@@ -91,13 +91,14 @@ const Navbar = () => {
                   />
                 </svg>
               </label>
-              {/* Logo */}
 
               <ul
                 tabIndex={0}
-                className="dropdown-content mt-3 z-[1] p-4 shadow bg-base-100 rounded-box w-full h-full flex flex-col items-start justify-between"
-              >
-                <Link to="/">
+                className="dropdown-content mt-3 z-[1] p-4 shadow bg-base-100 rounded-box w-70 h-fit flex flex-col items-start justify-between"
+                >
+
+                {/* Logo */}
+                <Link to="/" className="flex items-center gap-2 py-2">
                   <img
                     src="https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"
                     alt="logo"
@@ -108,7 +109,8 @@ const Navbar = () => {
                   </h1>
                 </Link>
 
-                <ul className="text-sm font-medium flex flex-col items-start gap-3">
+                {/* Nav Links */}
+                <ul className="text-xs font-medium flex flex-col items-start gap-2 py-4 border-y border-zinc-400 w-full">
                   {navLinks.map((link, index) => (
                     <li key={index}>
                       <NavLink
@@ -128,17 +130,18 @@ const Navbar = () => {
                   ))}
                 </ul>
 
+                {/* Button */}
                 {user ? (
-                  <div className="w-full text-base-100 p-2 rounded-md flex  transition-colors ease-in-out duration-300">
+                  <div className="w-full  p-2 rounded-md flex  transition-colors ease-in-out duration-300">
                     <button
                       onClick={handleSignout}
-                      className="flex items-center gap-2"
+                      className="btn flex items-center gap-2"
                     >
                       <FaSignOutAlt /> Signout
                     </button>
                   </div>
                 ) : (
-                  <div className="md:hidden gap-4 flex">
+                  <div className="md:hidden gap-4 flex py-2">
                     <Link to="/signin">
                       <SecondaryBtn
                         label="Sign In"
@@ -173,7 +176,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="navbar-center hidden lg:flex justify-center items-center">
-            <ul className="text-sm font-medium flex items-center gap-2">
+            <ul className="text-sm font-semibold flex items-center gap-3">
               {navLinks.map((link, index) => (
                 <li key={index}>
                   <NavLink
@@ -201,10 +204,10 @@ const Navbar = () => {
                 <label
                   tabIndex={0}
                   className="btn btn-ghost btn-circle avatar tooltip tooltip-bottom"
-                  data-tip={user.displayName || "User"}
+                  // data-tip={user.displayName || "User"}
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  <div className="w-10 rounded-full">
+                  <div className="w-16 rounded-full ">
                     {user.photoURL ? (
                       <img
                         src={
@@ -212,22 +215,24 @@ const Navbar = () => {
                           "https://i.postimg.cc/C5kPH183/user-2.png"
                         }
                         alt="User"
+                        className="w-full h-full rounded-full"
                       />
                     ) : (
-                      <FaUserCircle className="w-10 h-10" />
+                      <FaUserCircle/>
                     )}
                   </div>
                 </label>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow rounded-box w-50 flex flex-col items-start justify-center gap-2 poppins"
+                  className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow rounded-box w-50 flex flex-col items-start justify-center gap-2 poppins bg-zinc-100"
                 >
+                  <span className="text-sm font-semibold">{user.displayName || "User"}</span>
                   {privateLinks.map((link, index) => (
                     <li key={index} className="w-full">
                       <NavLink
                         to={link.href}
                         className={({ isActive }) =>
-                          `text-xs flex items-center gap-2 px-3 py-3 relative  after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-zinc-400 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] rounded-md transition-all ease-in-out duration-300 
+                          `text-xs flex items-center gap-2 px-3 py-3 relative  after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-zinc-400   after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] rounded-md transition-all ease-in-out duration-300 
                       ${
                         isActive
                           ? "active"

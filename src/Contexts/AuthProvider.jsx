@@ -11,6 +11,8 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../Firebase/Firebase.init";
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -28,17 +30,17 @@ const AuthProvider = ({ children }) => {
   };
 
   const registerUser = (email, password) => {
-    setLoading(false);
+    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const signIn = (email, password) => {
-    setLoading(false);
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   const signInWithGoogle = () => {
-    setLoading(false);
+    setLoading(true);
     return signInWithPopup(auth, googleProvider).finally(() =>
       setLoading(false)
     );
@@ -52,8 +54,8 @@ const AuthProvider = ({ children }) => {
   };
 
   const logOut = () => {
-    setLoading(false);
-    return signOut(auth);
+    setLoading(true);
+    return signOut(auth).finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -72,6 +74,15 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  const { data: userData, isLoading } = useQuery({
+    queryKey: ['userRole', user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/users/${user.email}`);
+      return res.data;
+    }
+  });
+
   const authContextValue = {
     loading,
     registerUser,
@@ -81,9 +92,11 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
     logOut,
     getToken,
+    userRole: userData?.role,
   };
 
-  return <AuthContext value={authContextValue}>{children}</AuthContext>;
+  return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
+
