@@ -259,7 +259,6 @@ const Navbar = () => {
                 <Link to="/signin">
                   <SecondaryBtn
                     label="Sign In"
-                    icon={<ArrowRight />}
                     className="font-bold"
                   />
                 </Link>

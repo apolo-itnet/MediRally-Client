@@ -30,6 +30,7 @@ import ParticipantProfile from "../Pages/Dashboard/Participant/ParticipantProfil
 import Feedback from "../Pages/Dashboard/Participant/Feedback";
 import Payment from "../Pages/Dashboard/Participant/Payment";
 import RegisteredCamps from "../Pages/Dashboard/Participant/RegisteredCamps";
+import AvailableCamps from "../Pages/AvailableCamps";
 
 const Router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const Router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "all-camps",
+        element: <AvailableCamps />,
       },
       {
         path: "about",

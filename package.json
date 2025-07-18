@@ -18,6 +18,7 @@
     "lucide-react": "^0.525.0",
     "motion": "^12.23.3",
     "react": "^19.1.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.60.0",
     "react-hot-toast": "^2.5.2",
@@ -26,6 +27,7 @@
     "react-router": "^7.6.3",
     "styled-components": "^6.1.19",
     "swiper": "^11.2.10",
+    "tailwind-datepicker-react": "^1.4.3",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

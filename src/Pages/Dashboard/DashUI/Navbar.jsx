@@ -4,6 +4,43 @@ import { slideDown, slideUp } from "../../../Utility/animation";
 import { ArrowRight, ChevronRight, HomeIcon } from "lucide-react";
 
 export default function Navbar() {
+  const OrgNavLinks = [
+    { label: "Main Dashboard", href: "", },
+    {
+      label: "Add Camp",
+      href: "organizer/add-camp",
+    },
+    {
+      label: "Manage Camps",
+      href: "organizer/manage-camps",
+    },
+    {
+      label: "Manage Registered Camps",
+      href: "organizer/registered-camps",
+    },
+    { label: "Profile", href: "organizer/profile" },
+  ];
+
+  const PartNavLinks = [
+    { label: "Main Dashboard", href: "" },
+    {
+      label: "Registered Camps",
+      href: "participant/registered-camps",
+    },
+    {
+      label: "Payment",
+      href: "participant/payment-history",
+    },
+    {
+      label: "Feedback",
+      href: "participant/feedback",
+    },
+    {
+      label: "Profile",
+      href: "participant/profile",
+    },
+  ];
+
   const { user } = useAuth();
 
   return (

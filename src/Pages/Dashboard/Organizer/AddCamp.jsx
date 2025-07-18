@@ -16,18 +16,96 @@ import {
 } from "lucide-react";
 import { fadeIn, slideUp } from "../../../Utility/animation";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
+import axios from "axios";
+import useAuth from "../../../Hooks/useAuth";
+import { toastError, toastSuccess } from "../../../Utility/toastmsg";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router";
 
 const AddCamp = () => {
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Camp data submitted:", data);
-    reset(); // Clear form after submission
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setValue("eventDateTime", date);
+  };
+
+  const handleAddCamp = async (e) => {
+    setLoading(true);
+
+    const {
+      campName,
+      image,
+      fees,
+      eventDateTime,
+      venue,
+      doctorName,
+      maxParticipants,
+      duration,
+      description,
+      participantCount,
+    } = e;
+
+    const imageFile = image[0];
+
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    try {
+      // Upload image to imgbb
+      const imgRes = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
+        formData
+      );
+
+      if (imgRes.data.success) {
+        const imgURL = imgRes.data.data.url;
+
+        const newCamp = {
+          campName,
+          image: imgURL,
+          fees,
+          eventDateTime, 
+          venue, 
+          doctorName,
+          maxParticipants,
+          duration,
+          description,
+          participantCount,
+          postedBy: user?.email,
+          createdAt: new Date().toISOString(),
+        };
+
+        const res = await axios.post(
+          `${import.meta.env.VITE_API_URL}/add-camp`,
+          newCamp
+        );
+
+        if (res.data.insertedId) {
+          toastSuccess("Camp added successfully!");
+          reset();
+          // navigate("/dashboard/organizer/manage-camps");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      toastError("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,12 +119,14 @@ const AddCamp = () => {
       </h2>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleAddCamp)}
         className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs md:text-sm"
       >
         {/* Camp Name */}
-        <div>
-          <label className="label">Camp Name *</label>
+        <div className="md:col-span-2">
+          <label className="label">
+            Camp Name <span className="text-red-500">*</span>
+          </label>
           <div className="flex items-center gap-2">
             <UserPlus size={18} className="text-gray-500" />
             <input
@@ -63,7 +143,9 @@ const AddCamp = () => {
 
         {/* Camp Fees */}
         <div>
-          <label className="label">Camp Fees *</label>
+          <label className="label">
+            Camp Fees <span className="text-red-500">*</span>
+          </label>
           <div className="flex items-center gap-2">
             <DollarSign size={18} className="text-gray-500" />
             <input
@@ -79,42 +161,11 @@ const AddCamp = () => {
           )}
         </div>
 
-        {/* Date & Time */}
-        <div>
-          <label className="label">Date & Time *</label>
-          <div className="flex items-center gap-2">
-            <Calendar size={18} className="text-gray-500" />
-            <input
-              type="datetime-local"
-              {...register("dateTime", { required: true })}
-              className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
-            />
-          </div>
-          {errors.dateTime && (
-            <p className="text-red-500 text-sm">Date & Time is required</p>
-          )}
-        </div>
-
-        {/* Location */}
-        <div>
-          <label className="label">Location *</label>
-          <div className="flex items-center gap-2">
-            <MapPin size={18} className="text-gray-500" />
-            <input
-              type="text"
-              {...register("location", { required: true })}
-              className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
-              placeholder="Enter location"
-            />
-          </div>
-          {errors.location && (
-            <p className="text-red-500 text-sm">Location is required</p>
-          )}
-        </div>
-
         {/* Healthcare Professional */}
         <div>
-          <label className="label">Healthcare Professional *</label>
+          <label className="label">
+            Healthcare Professional <span className="text-red-500">*</span>
+          </label>
           <div className="flex items-center gap-2">
             <UserCheck size={18} className="text-gray-500" />
             <input
@@ -126,6 +177,50 @@ const AddCamp = () => {
           </div>
           {errors.doctorName && (
             <p className="text-red-500 text-sm">This field is required</p>
+          )}
+        </div>
+
+        {/* Location */}
+        <div>
+          <label className="label">
+            Venue Location <span className="text-red-500">*</span>
+          </label>
+          <div className="flex items-center gap-2">
+            <MapPin size={18} className="text-gray-500" />
+            <input
+              type="text"
+              {...register("venue", { required: true })}
+              className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
+              placeholder="Enter location"
+            />
+          </div>
+          {errors.location && (
+            <p className="text-red-500 text-sm">Location is required</p>
+          )}
+        </div>
+
+        {/* Date & Time */}
+        <div>
+          <label className="label">
+            Date & Time <span className="text-red-500">*</span>
+          </label>
+          <div className="flex items-center gap-2">
+            <Calendar size={18} className="text-gray-500" />
+            <div className="w-full">
+              <DatePicker
+                selected={selectedDate}
+                onChange={handleDateChange}
+                showTimeSelect
+                timeFormat="HH:mm"
+                timeIntervals={15}
+                dateFormat="dd/MM/yyyy HH:mm"
+                className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300 rounded-full"
+                placeholderText="Select date and time"
+              />
+            </div>
+          </div>
+          {errors.eventDateTime && (
+            <p className="text-red-500 text-sm">Date & Time is required</p>
           )}
         </div>
 
@@ -158,8 +253,10 @@ const AddCamp = () => {
         </div>
 
         {/* Image URL */}
-        <div className="md:col-span-2">
-          <label className="label">Image URL *</label>
+        <div>
+          <label className="label">
+            Image URL <span className="text-red-500">*</span>
+          </label>
           <div className="flex items-center gap-2">
             <ImageIcon size={18} className="text-gray-500" />
             <input
@@ -167,7 +264,6 @@ const AddCamp = () => {
               {...register("image", { required: "Profile picture required" })}
               accept="image/*"
               className="file-input file-input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
-              
             />
           </div>
           {errors.image && (
@@ -177,7 +273,9 @@ const AddCamp = () => {
 
         {/* Description */}
         <div className="md:col-span-3">
-          <label className="label">Camp Description *</label>
+          <label className="label">
+            Camp Description <span className="text-red-500">*</span>
+          </label>
           <div className="flex items-start gap-2">
             <AlignLeft size={18} className="text-gray-500 mt-2" />
             <textarea
@@ -190,19 +288,18 @@ const AddCamp = () => {
             <p className="text-red-500 text-sm">Description is required</p>
           )}
         </div>
-      </form>
 
-      {/* Submit Button */}
-      <div className="flex justify-center items-center py-4">
-        <SecondaryBtn
-          type="submit"
-          label="Add Camp"
-          icon={Plus}
-          iconClassName="group-hover:rotate-0"
-          onClick={handleSubmit(onSubmit)}
-          className="w-full"
-        ></SecondaryBtn>
-      </div>
+        {/* Submit Button */}
+        <div className="col-span-3 flex justify-center items-center py-4">
+          <SecondaryBtn
+            type="submit"
+            label={loading ? "Creating..." : "Add Camp"}
+            icon={Plus}
+            iconClassName="group-hover:rotate-0"
+            className="w-full flex justify-center items-center py-2"
+          />
+        </div>
+      </form>
     </motion.div>
   );
 };

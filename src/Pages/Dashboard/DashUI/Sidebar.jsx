@@ -101,7 +101,7 @@ export default function Sidebar() {
                 alt="logo"
                 className="w-8 h-8"
               />
-              <h1 className="text-4xl font-bold zain text-rose-500">
+              <h1 className="text-4xl font-bold zain text-pink-700">
                 Medi <span className="text-sky-400">Rally</span>
               </h1>
             </Link>
