@@ -9,16 +9,13 @@ export default function Navbar() {
   return (
     <motion.div
       {...slideDown(0)}
-      className="fixed top-0 left-64 right-0 h-fit py-3 bg-zinc-50 border-b border-sky-600/20 flex items-center justify-between px-6 z-20"
+      className="fixed top-0 left-70 right-0 h-fit py-5 flex items-center justify-between px-6 z-20 bg-zinc-100 border-b border-gray-200"
     >
       {/* Breadcrumb (left) */}
-      <div >
-        <ol className="flex items-center whitespace-nowrap py-2">
+      <div>
+        <ol className="flex items-center whitespace-nowrap">
           <li className="inline-flex items-center">
-            <a
-              className="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-hidden focus:text-blue-600"
-              href="#"
-            >
+            <a className="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-hidden focus:text-blue-600">
               <HomeIcon size={16} className="mr-2" /> Pages
             </a>
             <ChevronRight size={16} className="mx-2" />
@@ -31,7 +28,9 @@ export default function Navbar() {
             Register
           </li>
         </ol>
-          <h1 className="text-3xl font-semibold lexend tracking-wide ">Register</h1>
+        <h1 className="text-3xl font-semibold lexend tracking-wide ">
+          Register
+        </h1>
       </div>
 
       {/* Right: Search + Avatar */}
@@ -39,10 +38,10 @@ export default function Navbar() {
         <input
           type="text"
           placeholder="Search..."
-          className="input input-bordered w-40 md:w-64 h-9 text-sm"
+          className="input input-bordered w-40 md:w-64 py-2 text-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
         />
         <div className="avatar">
-          <div className="w-9 rounded-full ring ring-pink-700 ring-offset-base-100 ring-offset-2">
+          <div className="w-9 rounded-full ring ring-sky-400 ring-offset-base-100 ring-offset-2">
             <img
               src={user?.photoURL || "https://i.postimg.cc/C5kPH183/user-2.png"}
               alt="User"

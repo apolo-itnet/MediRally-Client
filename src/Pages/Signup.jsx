@@ -33,37 +33,6 @@ const SignUp = () => {
     reset,
   } = useForm();
 
-  // const onSubmit = async (data) => {
-  //   const { fullName, email, password, image, role } = data;
-  //   setLoading(true);
-
-  //   const formData = new FormData();
-  //   formData.append("image", image[0]);
-
-  //   try {
-  //     const imgbbRes = await axios.post(
-  //       `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
-  //       formData
-  //     );
-  //     const photoURL = imgbbRes.data.data.url;
-
-  //     if (!registerUser || !updateUserProfile) {
-  //       throw new Error("registerUser function not defined in AuthContext");
-  //     }
-
-  //     const userCredential = await registerUser(email, password);
-  //     await updateUserProfile(fullName, photoURL);
-
-  //     toastSuccess("Successfully Signed Up!");
-  //     reset();
-  //     navigate(form, { replace: true });
-  //   } catch (error) {
-  //     toastError(error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const onSubmit = async (data) => {
     const { fullName, email, password, image, role } = data;
     setLoading(true);

@@ -89,7 +89,9 @@ const BannerSlider = () => {
                       </p>
                       <SecondaryBtn
                         label="Learn More"
-                        icon={<ArrowRight size={16} />}
+                        icon={ArrowRight}
+                        iconProps={{ size: 18 }}
+                        type="button"
                         className="w-fit py-2  justify-center items-center inline-flex"
                       ></SecondaryBtn>
                     </motion.div>

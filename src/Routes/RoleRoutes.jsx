@@ -9,7 +9,7 @@ const RoleRoutes = ({children, role}) => {
 
   if (loading) return <Loader/>;
 
-  if (!userRole !== role) return <Navigate to="/dashboard" replace/>;
+  if (userRole !== role) return <Navigate to="/dashboard" replace/>;
 
   return children;
 };

@@ -62,7 +62,8 @@ const Footer = () => {
               <div className="logo self-center">
                 <SecondaryBtn
                   label="Contact US"
-                  icon={<ArrowRight size={16} />}
+                  icon={ArrowRight}
+                  iconProps={{ size: 18 }}
                   className="w-fit py-2 flex items-center"
                 ></SecondaryBtn>
               </div>
