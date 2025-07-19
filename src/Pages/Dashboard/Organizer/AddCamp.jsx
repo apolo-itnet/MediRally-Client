@@ -45,20 +45,20 @@ const AddCamp = () => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 4); // limit max 4
+    const files = Array.from(e.target.files).slice(0, 4); 
     const previews = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
-      category: "Banner", // default
+      category: "Banner", 
     }));
     setImagePreviews(previews);
   };
 
-  const handleCategoryChange = (index, value) => {
-    const updated = [...imagePreviews];
-    updated[index].category = value;
-    setImagePreviews(updated);
-  };
+  // const handleCategoryChange = (index, value) => {
+  //   const updated = [...imagePreviews];
+  //   updated[index].category = value;
+  //   setImagePreviews(updated);
+  // };
 
   const handleAddCamp = async (e) => {
     setLoading(true);

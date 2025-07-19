@@ -5,13 +5,6 @@ import { createBrowserRouter } from "react-router";
 import MainLayout from "../Layouts/MainLayout";
 import DashboardLayout from "../Layouts/DashboardLayout";
 
-// Auth & Pages
-import SignUp from "../Pages/Signup";
-import SignIn from "../Pages/SignIn";
-import Home from "../Pages/Home";
-import AboutUs from "../Pages/AboutUs";
-import ContactUs from "../Pages/ContactUs";
-
 // Protected Routes (role checked)
 import PrivateRoutes from "../Routes/PrivateRoutes";
 import RoleRoutes from "../Routes/RoleRoutes";
@@ -30,7 +23,18 @@ import ParticipantProfile from "../Pages/Dashboard/Participant/ParticipantProfil
 import Feedback from "../Pages/Dashboard/Participant/Feedback";
 import Payment from "../Pages/Dashboard/Participant/Payment";
 import RegisteredCamps from "../Pages/Dashboard/Participant/RegisteredCamps";
+
+// Auth & Pages
+import SignUp from "../Pages/Signup";
+import SignIn from "../Pages/SignIn";
+import Home from "../Pages/Home";
 import AvailableCamps from "../Pages/AvailableCamps";
+import CampDetailsPage from "../Pages/CampDetailsPage";
+import AboutUs from "../Pages/AboutUs";
+import ContactUs from "../Pages/ContactUs";
+
+
+
 
 const Router = createBrowserRouter([
   {
@@ -45,6 +49,10 @@ const Router = createBrowserRouter([
       {
         path: "all-camps",
         element: <AvailableCamps />,
+      },
+      {
+        path: "available-camps/:id",
+        element: <CampDetailsPage />,
       },
       {
         path: "about",
