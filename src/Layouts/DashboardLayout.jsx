@@ -12,7 +12,7 @@ const DashboardLayout = () => {
         <header>
           <Navbar />
         </header>
-        <main className="flex  ml-72 mt-24 p-6 mx-auto">
+        <main className="flex lg:ml-72 mt-24 p-6 mx-auto">
           <Outlet />
         </main>
       </div>

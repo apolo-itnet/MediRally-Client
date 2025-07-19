@@ -105,7 +105,7 @@ const Navbar = () => {
                     className="w-8 h-8"
                   />
                   <h1 className="text-2xl font-bold zain text-pink-700">
-                    Medi <span className="text-sky-600">Rally</span>
+                    Medi <span className="text-green-500">Rally</span>
                   </h1>
                 </Link>
 
@@ -168,7 +168,7 @@ const Navbar = () => {
                 className="w-8 h-8"
               />
               <h1 className="text-3xl font-bold zain text-pink-700 px-2">
-                Medi <span className="text-sky-600">Rally</span>
+                Medi <span className="text-green-500">Rally</span>
               </h1>
             </Link>
           </div>

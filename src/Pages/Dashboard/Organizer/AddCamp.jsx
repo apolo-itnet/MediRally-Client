@@ -28,6 +28,7 @@ const AddCamp = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const navigate = useNavigate();
 
   const {
@@ -43,12 +44,27 @@ const AddCamp = () => {
     setValue("eventDateTime", date);
   };
 
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files).slice(0, 4); // limit max 4
+    const previews = files.map((file) => ({
+      file,
+      preview: URL.createObjectURL(file),
+      category: "Banner", // default
+    }));
+    setImagePreviews(previews);
+  };
+
+  const handleCategoryChange = (index, value) => {
+    const updated = [...imagePreviews];
+    updated[index].category = value;
+    setImagePreviews(updated);
+  };
+
   const handleAddCamp = async (e) => {
     setLoading(true);
 
     const {
       campName,
-      image,
       fees,
       eventDateTime,
       venue,
@@ -59,50 +75,63 @@ const AddCamp = () => {
       participantCount,
     } = e;
 
-    const imageFile = image[0];
-
-    const formData = new FormData();
-    formData.append("image", imageFile);
+    if (imagePreviews.length === 0 || imagePreviews.length > 4) {
+      toastError("Please upload 1 to 4 images");
+      setLoading(false);
+      return;
+    }
 
     try {
-      // Upload image to imgbb
-      const imgRes = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
-        formData
-      );
+      const uploadedImageData = [];
 
-      if (imgRes.data.success) {
-        const imgURL = imgRes.data.data.url;
-
-        const newCamp = {
-          campName,
-          image: imgURL,
-          fees,
-          eventDateTime, 
-          venue, 
-          doctorName,
-          maxParticipants,
-          duration,
-          description,
-          participantCount,
-          postedBy: user?.email,
-          createdAt: new Date().toISOString(),
-        };
+      for (const img of imagePreviews) {
+        const formData = new FormData();
+        formData.append("image", img.file);
 
         const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/add-camp`,
-          newCamp
+          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
+          formData
         );
 
-        if (res.data.insertedId) {
-          toastSuccess("Camp added successfully!");
-          reset();
-          // navigate("/dashboard/organizer/manage-camps");
+        if (res.data.success) {
+          uploadedImageData.push({
+            url: res.data.data.url,
+            category: img.category,
+          });
+        } else {
+          throw new Error("Upload failed");
         }
+      }
+
+      const newCamp = {
+        campName,
+        images: uploadedImageData, // Now includes category
+        fees,
+        eventDateTime,
+        venue,
+        doctorName,
+        maxParticipants,
+        duration,
+        description,
+        participantCount,
+        postedBy: user?.email,
+        createdAt: new Date().toISOString(),
+      };
+
+      const saveRes = await axios.post(
+        `${import.meta.env.VITE_API_URL}/add-camp`,
+        newCamp
+      );
+
+      if (saveRes.data.insertedId) {
+        toastSuccess("Camp added successfully!");
+        setImagePreviews([]);
+        reset();
+        // navigate("/dashboard/organizer/manage-camps");
       }
     } catch (err) {
       console.error(err);
-      toastError("Something went wrong");
+      toastError("Something went wrong!");
     } finally {
       setLoading(false);
     }
@@ -111,7 +140,7 @@ const AddCamp = () => {
   return (
     <motion.div
       {...fadeIn(0.1)}
-      className="w-full mx-auto px-4 py-10 bg-white rounded-2xl lexend"
+      className="w-full mx-auto px-4 py-6 bg-white rounded-2xl lexend"
     >
       <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-rose-500">
         <ClipboardSignature className="inline mr-2" /> Add a New Medical Camp
@@ -211,7 +240,6 @@ const AddCamp = () => {
                 selected={selectedDate}
                 onChange={handleDateChange}
                 showTimeSelect
-                timeFormat="HH:mm"
                 timeIntervals={15}
                 dateFormat="dd/MM/yyyy HH:mm"
                 className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300 rounded-full"
@@ -226,7 +254,7 @@ const AddCamp = () => {
 
         {/* Max Participant Limit (extra) */}
         <div>
-          <label className="label">Max Participants (optional)</label>
+          <label className="label">Total Participants </label>
           <div className="flex items-center gap-2">
             <Users size={18} className="text-gray-500" />
             <input
@@ -240,7 +268,7 @@ const AddCamp = () => {
 
         {/* Duration (extra field) */}
         <div>
-          <label className="label">Duration (optional)</label>
+          <label className="label">Camp Duration</label>
           <div className="flex items-center gap-2">
             <Clock4 size={18} className="text-gray-500" />
             <input
@@ -253,7 +281,7 @@ const AddCamp = () => {
         </div>
 
         {/* Image URL */}
-        <div>
+        {/* <div>
           <label className="label">
             Image URL <span className="text-red-500">*</span>
           </label>
@@ -263,16 +291,62 @@ const AddCamp = () => {
               type="file"
               {...register("image", { required: "Profile picture required" })}
               accept="image/*"
+              multiple
+              onChange={handleImageChange}
               className="file-input file-input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
             />
           </div>
           {errors.image && (
-            <p className="text-red-500 text-sm">Image URL is required</p>
+            <p className="text-red-500 text-sm">at least one image required</p>
+          )}
+        </div> */}
+
+        <div className="relative">
+          <label className="label">
+            Upload Images <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+            className="file-input file-input-bordered w-full rounded-full"
+          />
+
+          {/* Preview */}
+          {imagePreviews.length > 0 && (
+            <div className="lg:absolute w-fit flex flex-wrap gap-3 mt-4">
+              {imagePreviews.map((img, index) => (
+                <div
+                  key={index}
+                  className="border border-zinc-300 rounded-lg p-2 flex flex-col items-center"
+                >
+                  <img
+                    src={img.preview}
+                    alt={`Preview ${index}`}
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <select
+                    className="mt-2 select select-xs select-bordered w-full"
+                    value={img.category}
+                    onChange={(e) => {
+                      const updated = [...imagePreviews];
+                      updated[index].category = e.target.value;
+                      setImagePreviews(updated);
+                    }}
+                  >
+                    <option>Banner</option>
+                    <option>Doctor</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              ))}
+            </div>
           )}
         </div>
 
         {/* Description */}
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <label className="label">
             Camp Description <span className="text-red-500">*</span>
           </label>
@@ -290,13 +364,13 @@ const AddCamp = () => {
         </div>
 
         {/* Submit Button */}
-        <div className="col-span-3 flex justify-center items-center py-4">
+        <div className="col-span-3 flex justify-center items-center py-2 ">
           <SecondaryBtn
             type="submit"
             label={loading ? "Creating..." : "Add Camp"}
             icon={Plus}
             iconClassName="group-hover:rotate-0"
-            className="w-full flex justify-center items-center py-2"
+            className="flex justify-center items-center py-2"
           />
         </div>
       </form>

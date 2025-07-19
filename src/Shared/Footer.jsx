@@ -44,7 +44,7 @@ const Footer = () => {
               <span className="text-7xl md:text-9xl xl:text-[14rem] leading-10 xl:leading-[10rem] tracking-tighter text-pink-700">
                 Medi
               </span>
-              <span className="text-7xl md:text-9xl xl:text-[14rem] leading-10 xl:leading-[10rem] text-sky-600 -ml-2">
+              <span className="text-7xl md:text-9xl xl:text-[14rem] leading-10 xl:leading-[10rem] text-green-500 -ml-2">
                 Rally
               </span>
             </h1>

@@ -88,23 +88,20 @@ export default function Sidebar() {
     <div className="bg-white z-50">
       {isLoading && <Loader />}
       <Toaster reverseOrder={false} />
-      <motion.div
-        {...slideRight(0)}
-        className="w-70 h-screen lexend"
-      >
+      <motion.div {...slideRight(0)} className="w-70 h-screen lexend">
         <div className="flex flex-col justify-between w-full h-full">
           {/* Logo */}
           <div className="py-5 flex items-center justify-center border-b border-gray-300">
-            <Link to="/" className="flex items-center gap-2 py-2">
+            <div className="flex items-center gap-2 py-2">
               <img
                 src="https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"
                 alt="logo"
                 className="w-8 h-8"
               />
-              <h1 className="text-4xl font-bold zain text-pink-700">
-                Medi <span className="text-sky-400">Rally</span>
+              <h1 className="text-4xl font-bold zain text-rose-500">
+                Medi <span className="text-green-500">Rally</span>
               </h1>
-            </Link>
+            </div>
           </div>
 
           {/* Nav Links */}
@@ -120,17 +117,27 @@ export default function Sidebar() {
                       to={link.href}
                       end
                       className={({ isActive }) =>
-                        `flex items-center gap-3 px-4 py-3  transition-all duration-200 ${
+                        `flex items-center gap-3 px-4 py-3 transition-all duration-200 ${
                           isActive
-                            ? "hover:bg-rose-50 border-r-4 border-rose-500 text-rose-500 font-semibold transition-colors duration-300 ease-in-out"
+                            ? "hover:bg-rose-50 border-r-4 border-rose-500 text-zinc-800 font-semibold"
                             : "text-zinc-400 hover:bg-gray-100"
                         }`
                       }
                     >
-                      <span className="">{link.icon}</span>
-                      <span className="text-sm font-medium">
-                        {link.label}
-                      </span>
+                      {({ isActive }) => (
+                        <>
+                          <span
+                            className={`text-sm ${
+                              isActive ? "text-rose-500" : "text-zinc-400"
+                            }`}
+                          >
+                            {link.icon}
+                          </span>
+                          <span className="text-sm font-medium">
+                            {link.label}
+                          </span>
+                        </>
+                      )}
                     </NavLink>
                   </li>
                 ))}
@@ -138,23 +145,38 @@ export default function Sidebar() {
             )}
 
             {userRole === "Participant" && (
-              <div className="space-y-3">
-                {PartNavLinks.map((link) => (
-                  <NavLink
-                    key={link.href}
-                    to={link.href}
-                    end
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-sky-100 transition ${
-                        isActive ? "text-lime" : "text-gray-700"
-                      }`
-                    }
-                  >
-                    <span className="text-lg text-rose-500">{link.icon}</span>
-                    <span className="text-sm font-medium">{link.label}</span>
-                  </NavLink>
+              <ul className="space-y-3">
+                {PartNavLinks.map((link, index) => (
+                   <li key={index}>
+                    <NavLink
+                      to={link.href}
+                      end
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 px-4 py-3 transition-all duration-200 ${
+                          isActive
+                            ? "hover:bg-rose-50 border-r-4 border-rose-500 text-zinc-800 font-semibold"
+                            : "text-zinc-400 hover:bg-gray-100"
+                        }`
+                      }
+                    >
+                      {({ isActive }) => (
+                        <>
+                          <span
+                            className={`text-sm ${
+                              isActive ? "text-rose-500" : "text-zinc-400"
+                            }`}
+                          >
+                            {link.icon}
+                          </span>
+                          <span className="text-sm font-medium">
+                            {link.label}
+                          </span>
+                        </>
+                      )}
+                    </NavLink>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </motion.nav>
 

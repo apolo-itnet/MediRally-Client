@@ -1,57 +1,77 @@
-// CampCard.jsx
-import { useQuery } from '@tanstack/react-query'
-import { MapPin, DollarSign, Tag } from 'lucide-react'
-import axios from 'axios'
-import Loader from '../../../Shared/Loader/Loader'
+import {
+  MapPin,
+  CalendarDays,
+  DollarSign,
+  Calendar,
+  User,
+  Users,
+  UserCheck,
+} from "lucide-react";
+import { Link } from "react-router";
+import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 
-const fetchCamps = async () => {
-  const res = await axios.get(`${import.meta.env.VITE_API_URL}/available-camps`)
-  return res.data
-}
+const CampCard = ({ camp }) => (
+  <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 group">
+    {/* Camp Image */}
+    <img
+      src={camp?.images?.[1] || "https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"}
+      alt={camp.campName}
+      className="w-full h-48 object-cover"
+    />
 
-const CampCard = () => {
-  const { data: camps = [], isLoading, isError } = useQuery({
-    queryKey: ['camps'],
-    queryFn: fetchCamps,
-  })
+    {/* Camp Details */}
+    <div className="p-4">
+      <div>
+        <h2 className="text-xl font-bold text-gray-800">{camp.campName}</h2>
+      </div>
 
-  if (isLoading) return <div className="text-center p-10"><Loader/></div>
-  if (isError) return <div className="text-center p-10 text-red-500">Error fetching camps!</div>
+      <div>
+        <p className="text-sm text-gray-400 py-2">
+          {camp.description?.slice(0, 100)}...
+        </p>
+      </div>
 
-  return (
-    <div className="grid md:grid-cols-3 gap-6 p-6">
-      {camps.map((camp) => (
-        <div
-          key={camp._id}
-          className="bg-white rounded-2xl shadow-lg overflow-hidden transition hover:shadow-xl"
-        >
-          <img
-            src={camp.image}
-            alt={camp.title}
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-5 space-y-2">
-            <h2 className="text-xl font-semibold">{camp.title}</h2>
-            <p className="text-gray-500 flex items-center gap-2 text-sm">
-              <MapPin size={16} className="text-blue-600" />
-              {camp.location}
-            </p>
-            <p className="text-gray-500 flex items-center gap-2 text-sm">
-              <DollarSign size={16} className="text-green-600" />
-              {camp.price} BDT
-            </p>
-            <p className="text-gray-500 flex items-center gap-2 text-sm">
-              <Tag size={16} className="text-purple-600" />
-              {camp.category}
-            </p>
-            <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition">
-              View Details
-            </button>
-          </div>
-        </div>
-      ))}
+      <div className="mt-2 space-y-1 text-sm">
+        <p className="flex items-center text-gray-600 font-bold">
+          <User size={16} className="mr-2 " />
+          {camp.doctorName}
+        </p>
+
+        <p className="flex items-center text-gray-600">
+          <Calendar size={16} className="mr-2" />
+          {new Date(camp.eventDateTime).toLocaleDateString()}
+        </p>
+
+        <p className="flex items-center text-gray-600">
+          <MapPin size={16} className="mr-2" />
+          {camp.venue}
+        </p>
+
+        {camp.fees !== undefined && (
+          <p className="flex items-center text-gray-600">
+            <DollarSign size={16} className="mr-2" />
+            Fee: {camp.fees === 0 ? "Free" : `৳ ${camp.fees}`}
+          </p>
+        )}
+
+        <p className="flex items-center text-gray-600">
+          <Users size={16} className="mr-2" />
+          Participants: {camp.maxParticipants}
+        </p>
+        <p className="flex items-center text-gray-600">
+          <UserCheck size={16} className="mr-2" />
+          Attend Participants: {camp.participantCount}
+        </p>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="mt-4 flex justify-between">
+        <Link to={`/available-camps/${camp._id}`}>
+          <SecondaryBtn label="View Details" className="w-full"  />
+        </Link>
+      </div>
     </div>
-  )
-}
+  </div>
+);
 
-export default CampCard
+export default CampCard;

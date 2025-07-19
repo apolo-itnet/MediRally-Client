@@ -46,7 +46,7 @@ export default function Navbar() {
   return (
     <motion.div
       {...slideDown(0)}
-      className="fixed top-0 left-70 right-0 h-fit py-5 flex items-center justify-between px-6 z-20 bg-zinc-100 border-b border-gray-200"
+      className="fixed top-0 lg:left-70 right-0 h-fit py-5 flex items-center justify-between px-6 z-20 bg-zinc-100 border-b border-gray-200"
     >
       {/* Breadcrumb (left) */}
       <div>
