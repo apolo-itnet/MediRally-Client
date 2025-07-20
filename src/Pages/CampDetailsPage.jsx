@@ -19,6 +19,7 @@ import { slideRight } from "../Utility/animation";
 import Loader from "../Shared/Loader/Loader";
 import useAuth from "../Hooks/useAuth";
 import { useEffect, useState } from "react";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
 
 const defaultDoctorImg = "https://i.postimg.cc/7ZR2SwvK/physician-doctor.png";
 
@@ -26,17 +27,29 @@ const CampDetailsPage = () => {
   const { id } = useParams();
   const { user, role } = useAuth();
   const [alreadyJoined, setAlreadyJoined] = useState(false);
+  const axiosPublic = useAxiosPublic();
 
   const { data: camp = {}, isLoading } = useQuery({
     queryKey: ["campDetails", id],
     queryFn: async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/available-camps/${id}`
-      );
-      const data = await res.json();
+      const res = await axiosPublic.get(`/available-camps/${id}`);
+      const data = res.data;
       return data;
     },
   });
+
+  // Check if user already joined this camp
+  useEffect(() => {
+    if (user?.email && camp?._id) {
+      fetch(`/api/joined/${camp._id}?email=${user.email}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.joined) {
+            setAlreadyJoined(true);
+          }
+        });
+    }
+  }, [user?.email, camp?._id]);
 
   if (isLoading)
     return (
@@ -65,19 +78,7 @@ const CampDetailsPage = () => {
     (img) => img.category === "Banner" || img.category === "Other"
   );
 
-  // Check if user already joined this camp
-  useEffect(() => {
-    if (user?.email) {
-      fetch(`/api/joined/${camp._id}?email=${user.email}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.joined) {
-            setAlreadyJoined(true);
-          }
-        });
-    }
-  }, [user?.email, camp._id]);
-
+  
   const handleJoin = () => {
     fetch("/api/join", {
       method: "POST",

@@ -6,9 +6,9 @@ import {
   ListChecks,
   BarChart2,
   CreditCard,
-  LogOut,
   ListPlus,
   HomeIcon,
+  LogOut,
 } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
@@ -67,13 +67,13 @@ export default function Sidebar() {
 
   const { userRole } = useAuth();
   const navigate = useNavigate();
-  const { logOut } = useContext(AuthContext);
+  const { SignOut } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignout = async () => {
     setIsLoading(true);
     try {
-      await logOut();
+      await SignOut();
       toastSuccess("Successfully signed out!");
       navigate("/signin", { replace: true });
     } catch (error) {

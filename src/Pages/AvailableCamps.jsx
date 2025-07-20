@@ -4,21 +4,25 @@ import { Search, Filter, Rows3, Rows2 } from "lucide-react";
 import axios from "axios";
 import CampCard from "./Component/CampCard/CampCard";
 import Loader from "../Shared/Loader/Loader";
+// import useAxiosSecure from "../Hooks/useAxiosSecure";
+// import useAuth from "../Hooks/useAuth";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
 
 const AvailableCamps = () => {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [gridCols, setGridCols] = useState(3);
+  // const {user, loading} = useAuth();
+  const axiosPublic = useAxiosPublic();
 
   const { data: camps = [], isLoading } = useQuery({
-    queryKey: ["available-camps"],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/available-camps`
-      );
-      return res.data;
-    },
-  });
+  // enabled: !loading && !!user,
+  queryKey: ["available-camps"],
+  queryFn: async () => {
+    const res = await axiosPublic.get("/available-camps");
+    return res.data;
+  },
+});
 
   // 🔎 Search Filter
   const filteredCamps = camps
@@ -71,9 +75,13 @@ const AvailableCamps = () => {
 
       {/* 🟩 Card Grid */}
       {isLoading ? (
-        <div className="text-center text-lg"><Loader/> </div>
+        <div className="text-center text-lg">
+          <Loader />{" "}
+        </div>
       ) : (
-        <div className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-${gridCols}`}>
+        <div
+          className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-${gridCols}`}
+        >
           {filteredCamps?.map((camp) => (
             <CampCard key={camp._id} camp={camp} />
           ))}

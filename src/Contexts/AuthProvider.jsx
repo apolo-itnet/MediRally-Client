@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  const logOut = () => {
+  const SignOut = () => {
     setLoading(true);
 
     // ❌ Remove the JWT token from localStorage
@@ -116,7 +116,7 @@ const AuthProvider = ({ children }) => {
     signInWithGoogle,
     user,
     updateUserProfile,
-    logOut,
+    SignOut,
     getToken,
     userRole: userData?.role,
   };

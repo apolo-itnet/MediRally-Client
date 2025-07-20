@@ -25,7 +25,7 @@ import SecondaryBtn from "./Button/SecondaryBtn";
 import PrimaryBtn from "./Button/PrimaryBtn";
 
 const Navbar = () => {
-  const { user, logOut } = use(AuthContext);
+  const { user, SignOut } = use(AuthContext);
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ const Navbar = () => {
     setIsLoading(true);
 
     try {
-      await logOut();
+      await SignOut();
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
