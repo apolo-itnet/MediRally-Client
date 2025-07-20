@@ -6,6 +6,7 @@ import {
   User,
   Users,
   UserCheck,
+  Clock10,
 } from "lucide-react";
 import { Link } from "react-router";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
@@ -13,8 +14,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
+import useAuth from "../../../Hooks/useAuth";
 
 const CampCard = ({ camp }) => {
+  const {user} = useAuth();
   const { campName, images, _id } = camp;
 
   const sliderImages = images?.filter(
@@ -68,15 +71,16 @@ const CampCard = ({ camp }) => {
           </p>
         </div>
 
-        <div className="mt-2 space-y-1 text-sm">
-          <p className="flex items-center text-gray-600 font-bold">
+        <div className="mt-2 space-y-2 text-sm">
+          <p className="flex items-center text-gray-600 font-bold text-base">
             <User size={16} className="mr-2 text-rose-500 " />
             {camp.doctorName}
           </p>
 
-          <p className="flex items-center text-gray-600">
-            <Calendar size={16} className="mr-2 text-rose-500" />
-            {new Date(camp.eventDateTime).toLocaleDateString()}
+          <p className="flex items-center text-gray-600 font-medium">
+            <Users size={16} className="mr-2 text-rose-500" />
+            {/* Participants Limit : {camp.maxParticipants} */}
+            Organizer : {camp?.organizer?.name}
           </p>
 
           <p className="flex items-center text-gray-600">
@@ -84,24 +88,34 @@ const CampCard = ({ camp }) => {
             {camp.venue}
           </p>
 
-          {camp.fees !== undefined && (
+          <div className="flex justify-between items-center ">
             <p className="flex items-center text-gray-600">
-              <DollarSign size={16} className="mr-2 text-rose-500" />
-              {/* Fee: {camp.fees === 0 ? "Free" : `৳ ${camp.fees}`} */}
-              <span>
-              Fees: <span className="font-semibold">৳ {camp.fees}</span>
-            </span>
+              <Calendar size={16} className="mr-2 text-rose-500" />
+              {new Date(camp.eventDateTime).toLocaleDateString()}
             </p>
-          )}
 
-          <p className="flex items-center text-gray-600">
-            <Users size={16} className="mr-2 text-rose-500" />
-            Participants Limit : {camp.maxParticipants}
-          </p>
+            <p className="flex items-center text-gray-600">
+              <Clock10 size={16} className="mr-2 text-rose-500" />
+              <span> {new Date(camp.eventDateTime).toLocaleTimeString()}</span>
+            </p>
+
+            {camp.fees !== undefined && (
+              <p className="flex items-center text-gray-600">
+                <DollarSign size={16} className="mr-2 text-rose-500" />
+                {/* Fee: {camp.fees === 0 ? "Free" : `৳ ${camp.fees}`} */}
+                <span>
+                  Fees: <span className="font-semibold">৳ {camp.fees}</span>
+                </span>
+              </p>
+            )}
+          </div>
+          
           {/* <p className="flex items-center text-gray-600">
             <UserCheck size={16} className="mr-2 text-rose-500" />
             Attend Participants: {camp.participantCount}
           </p> */}
+
+          
         </div>
 
         {/* Action Buttons */}

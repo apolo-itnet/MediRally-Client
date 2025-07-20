@@ -11,8 +11,8 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../Firebase/Firebase.init";
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -34,9 +34,29 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const signIn = (email, password) => {
+  const signIn = async (email, password) => {
     setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // ✅ Get Firebase token (JWT)
+      const token = await user.getIdToken();
+
+      // 💾 Save token to localStorage (you’ll use this in AxiosSecure later)
+      localStorage.setItem("access-token", token);
+
+      return userCredential;
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signInWithGoogle = () => {
@@ -55,6 +75,10 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setLoading(true);
+
+    // ❌ Remove the JWT token from localStorage
+    localStorage.removeItem("access-token");
+
     return signOut(auth).finally(() => setLoading(false));
   };
 
@@ -75,12 +99,14 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const { data: userData, isLoading } = useQuery({
-    queryKey: ['userRole', user?.email],
+    queryKey: ["userRole", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/users/${user.email}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/users/${user.email}`
+      );
       return res.data;
-    }
+    },
   });
 
   const authContextValue = {
@@ -95,8 +121,11 @@ const AuthProvider = ({ children }) => {
     userRole: userData?.role,
   };
 
-  return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;
-

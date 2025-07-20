@@ -71,7 +71,7 @@ const AvailableCamps = () => {
 
       {/* 🟩 Card Grid */}
       {isLoading ? (
-        <p className="text-center text-lg"><Loader/> </p>
+        <div className="text-center text-lg"><Loader/> </div>
       ) : (
         <div className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-${gridCols}`}>
           {filteredCamps?.map((camp) => (

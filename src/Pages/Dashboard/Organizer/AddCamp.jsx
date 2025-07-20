@@ -45,11 +45,11 @@ const AddCamp = () => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 4); 
+    const files = Array.from(e.target.files).slice(0, 4);
     const previews = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
-      category: "Banner", 
+      category: "Banner",
     }));
     setImagePreviews(previews);
   };
@@ -114,7 +114,11 @@ const AddCamp = () => {
         duration,
         description,
         participantCount,
-        postedBy: user?.email,
+        organizer: {
+          name: user?.displayName,
+          email: user?.email,
+          photo: user?.photoURL, 
+        },
         createdAt: new Date().toISOString(),
       };
 
