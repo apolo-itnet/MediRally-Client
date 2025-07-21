@@ -20,14 +20,30 @@ import Loader from "../Shared/Loader/Loader";
 import useAuth from "../Hooks/useAuth";
 import { useEffect, useState } from "react";
 import useAxiosPublic from "../Hooks/useAxiosPublic";
+import Input from "./Component/Shared/Input";
+import Select from "./Component/Shared/Select";
+import SecondaryBtn from "../Shared/Button/SecondaryBtn";
+import { toastError, toastSuccess } from "../Utility/toastmsg";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
+import { useForm } from "react-hook-form";
 
 const defaultDoctorImg = "https://i.postimg.cc/7ZR2SwvK/physician-doctor.png";
 
 const CampDetailsPage = () => {
   const { id } = useParams();
   const { user, role } = useAuth();
-  const [alreadyJoined, setAlreadyJoined] = useState(false);
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
+  const [alreadyJoined, setAlreadyJoined] = useState(false);
+  const [participantCounts, setParticipantCount] = useState(0);
+  const [joinClicked, setJoinClicked] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
   const { data: camp = {}, isLoading } = useQuery({
     queryKey: ["campDetails", id],
@@ -40,20 +56,14 @@ const CampDetailsPage = () => {
 
   // Check if user already joined this camp
   useEffect(() => {
-    if (user?.email && camp?._id) {
-      fetch(`/api/joined/${camp._id}?email=${user.email}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data?.joined) {
-            setAlreadyJoined(true);
-          }
-        });
+    if (camp && camp.participants) {
+      setParticipantCount(camp.participants.length);
     }
-  }, [user?.email, camp?._id]);
+  }, [camp]);
 
   if (isLoading)
     return (
-      <div className="text-center py-10">
+      <div>
         <Loader />
       </div>
     );
@@ -79,28 +89,40 @@ const CampDetailsPage = () => {
   );
 
   
-  const handleJoin = () => {
-    fetch("/api/join", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+
+  const onSubmit = async (data) => {
+    const registrationData = {
+      // userId: user.uid,
+      campId: camp._id,
+      campName,
+      campFees: fees,
+      location: venue,
+      doctorName,
+      participant: {
+        name: user.displayName,
+        email: user.email,
+        age: data.age,
+        phone: data.phone,
+        gender: data.gender,
+        emergencyContact: data.emergency,
       },
-      body: JSON.stringify({
-        campId: camp._id,
-        participant: {
-          name: user.displayName,
-          email: user.email,
-          photo: user.photoURL,
-        },
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.insertedId) {
-          toast.success("Successfully joined the camp!");
-          setAlreadyJoined(true);
+    };
+
+    try {
+      const res = await axiosSecure.post("/register-camp", registrationData);
+      if (res.data.insertedId) {
+        // await axiosSecure.patch(`/update-participant-count/${camp._id}`);
+        toastSuccess("Successfully registered!");
+        if (joinClicked) {
+          setParticipantCount((prev) => prev + 1);
+          setJoinClicked(false);
         }
-      });
+        setAlreadyJoined(true);
+        reset(); // Reset form
+      }
+    } catch (err) {
+      toastError("Registration failed!");
+    }
   };
 
   const isDisabled = !user || role === "organizer" || alreadyJoined;
@@ -138,9 +160,7 @@ const CampDetailsPage = () => {
           />
         )}
 
-        <div>
-          {/* Camp details content */}
-
+        {/* <div >
           <button
             disabled={isDisabled}
             onClick={handleJoin}
@@ -153,12 +173,92 @@ const CampDetailsPage = () => {
           >
             {alreadyJoined ? "Already Joined" : "Join Camp"}
           </button>
-
           {alreadyJoined && (
             <p className="mt-2 text-green-600 text-sm">
               ✅ Go to your dashboard and pay to confirm your participation.
             </p>
           )}
+        </div> */}
+
+        
+        <div>
+          <label
+            htmlFor="join-modal"
+            className={`btn mt-4 ${
+              isDisabled ? "btn-disabled" : "btn-primary"
+            }`}
+          >
+            {alreadyJoined ? "Already Joined" : "Join Camp"}
+          </label>
+        </div>
+
+        {/* Join Modal */}
+        <div>
+          <input type="checkbox" id="join-modal" className="modal-toggle " />
+          <div className="modal">
+            <div className="max-w-5xl bg-zinc-50 p-8 rounded-2xl modal-box">
+              <h3 className="font-bold text-lg mb-4">Join Camp</h3>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-1 grid grid-cols-1 md:grid-cols-2 space-x-6 gap-2"
+              >
+                <Input value={campName} readOnly label="Camp Name" />
+                <Input value={fees} readOnly label="Camp Fees" />
+                <Input value={venue} readOnly label="Location" />
+                <Input
+                  value={doctorName}
+                  readOnly
+                  label="Healthcare Professional"
+                />
+                <Input
+                  value={user?.displayName}
+                  readOnly
+                  label="Participant Name"
+                />
+                <Input value={user?.email} readOnly label="Participant Email" />
+
+                <Input
+                  label="Age"
+                  name="age"
+                  register={register}
+                  errors={errors}
+                  validation={{ required: "Age is required" }}
+                />
+
+                <Input
+                  label="Phone Number"
+                  name="phone"
+                  register={register}
+                  errors={errors}
+                  validation={{ required: "Phone number is required" }}
+                />
+
+                <Select
+                  label="Gender"
+                  name="gender"
+                  register={register}
+                  errors={errors}
+                  options={["Male", "Female", "Other"]}
+                  validation={{ required: "Gender is required" }}
+                />
+
+                <Input
+                  label="Emergency Contact (Optional)"
+                  name="emergency"
+                  register={register}
+                  errors={errors}
+                  // Optional field, so no validation
+                />
+
+                <div className="modal-action col-span-2 justify-between">
+                  <label htmlFor="join-modal" className="btn">
+                    Close
+                  </label>
+                  <SecondaryBtn label="Submit" type="submit" />
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </motion.div>
 
@@ -185,7 +285,7 @@ const CampDetailsPage = () => {
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-rose-500" />
             <span>
-              {participantCount || 0} / {maxParticipants} Participants
+              {participantCounts} / {maxParticipants} Participants
             </span>
           </div>
 
