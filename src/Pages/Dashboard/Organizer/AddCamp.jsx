@@ -367,8 +367,10 @@ const AddCamp = () => {
         <div className="col-span-3 flex justify-center items-center py-2 ">
           <SecondaryBtn
             type="submit"
-            label={loading ? "Creating..." : "Add Camp"}
+            // label={loading ? "Creating..." : "Add Camp"}
+            label="Add Camp"
             icon={Plus}
+            loading={true}
             iconClassName="group-hover:rotate-0"
             className="flex justify-center items-center py-2"
           />

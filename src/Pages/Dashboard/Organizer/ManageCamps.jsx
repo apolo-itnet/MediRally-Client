@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, ListPlus, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Link } from "react-router";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 
 const ManageCamps = () => {
   const { user } = useAuth();
@@ -15,7 +16,7 @@ const ManageCamps = () => {
   const { data: camps = [], refetch } = useQuery({
     queryKey: ["camps", user?.email],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/organizer-camps/${user?.email}`);
+      const res = await axiosSecure.get(`/organizer-camps/${user?.email}`);
       return res.data;
     },
   });
@@ -46,14 +47,16 @@ const ManageCamps = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-center mb-8">Manage Your Camps</h2>
+    <div className="container mx-auto px-4 py-8 lexend">
+      <h2 className="text-3xl font-bold text-center mb-8 text-rose-500">
+        Manage Your Camps
+      </h2>
 
       {camps.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-lg">You haven't created any camps yet.</p>
-          <Link to="/create-camp" className="btn btn-primary mt-4">
-            Create Your First Camp
+          <Link to="/add-camp">
+            <SecondaryBtn label="Add Camp" icon={ListPlus} />
           </Link>
         </div>
       ) : (
@@ -62,6 +65,7 @@ const ManageCamps = () => {
             {/* Table Head */}
             <thead className="bg-gray-50">
               <tr>
+                <th className="py-3 px-4 text-left">Sl</th>
                 <th className="py-3 px-4 text-left">Camp Name</th>
                 <th className="py-3 px-4 text-left">Date & Time</th>
                 <th className="py-3 px-4 text-left">Location</th>
@@ -74,28 +78,34 @@ const ManageCamps = () => {
             <tbody className="divide-y divide-gray-200">
               {camps.map((camp) => (
                 <tr key={camp._id} className="hover:bg-gray-50">
-                  <td className="py-4 px-4">{camp.campName}</td>
+                  <td className="py-4 px-4">{camps.indexOf(camp) + 1}</td>
+                  <td className="py-4 px-4 ">{camp.campName}</td>
                   <td className="py-4 px-4">
-                    {new Date(camp.scheduledDateTime).toLocaleString()}
+                    {new Date(camp.eventDateTime).toLocaleString()}
                   </td>
-                  <td className="py-4 px-4">{camp.venueLocation}</td>
-                  <td className="py-4 px-4">{camp.healthcareProfessional}</td>
+                  <td className="py-4 px-4">{camp.venue}</td>
+                  <td className="py-4 px-4">{camp.doctorName}</td>
                   <td className="py-4 px-4 text-right">
                     <div className="flex justify-end space-x-2">
-                      <Link
-                        to={`/update-camp/${camp._id}`}
-                        className="btn btn-sm btn-outline btn-primary"
-                      >
-                        <Edit size={16} className="mr-1" />
-                        Edit
+                      <Link to={`/update-camp/${camp._id}`}>
+                        <SecondaryBtn
+                          label="Edit"
+                          icon={Edit}
+                          iconPosition="left"
+                          iconProps={{ size: 15 }}
+                          className="Px-4 py-1 text-xs font-light"
+                          iconClassName="group-hover:rotate-0"
+                        />
                       </Link>
-                      <button
+                      <SecondaryBtn
+                        label="Delete"
+                        icon={Trash2}
+                        iconPosition="left"
+                        iconProps={{ size: 15 }}
                         onClick={() => handleDeleteCamp(camp._id)}
-                        className="btn btn-sm btn-outline btn-error"
-                      >
-                        <Trash2 size={16} className="mr-1" />
-                        Delete
-                      </button>
+                        className="Px-4 py-1 text-xs font-light"
+                        iconClassName="group-hover:rotate-0"
+                      />
                     </div>
                   </td>
                 </tr>

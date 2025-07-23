@@ -98,8 +98,8 @@ export default function Sidebar() {
                 alt="logo"
                 className="w-8 h-8"
               />
-              <h1 className="text-4xl font-bold zain text-rose-500">
-                Medi <span className="text-green-500">Rally</span>
+              <h1 className="text-4xl font-bold lexend text-rose-500">
+                Medi <span className="">Rally</span>
               </h1>
             </div>
           </div>
