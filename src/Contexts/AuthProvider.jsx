@@ -98,7 +98,7 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const { data: userData, isLoading } = useQuery({
+  const { data: userData, isLoading: roleLoading } = useQuery({
     queryKey: ["userRole", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -110,7 +110,7 @@ const AuthProvider = ({ children }) => {
   });
 
   const authContextValue = {
-    loading,
+    loading : loading || roleLoading,
     registerUser,
     signIn,
     signInWithGoogle,

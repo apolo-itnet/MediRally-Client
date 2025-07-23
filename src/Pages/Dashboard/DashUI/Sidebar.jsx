@@ -22,45 +22,45 @@ import { Toaster } from "react-hot-toast";
 
 export default function Sidebar() {
   const OrgNavLinks = [
-    { label: "Main Dashboard", href: "", icon: <LayoutDashboard /> },
+    { label: "Main Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
     {
       label: "Add Camp",
-      href: "organizer/add-camp",
+      href: "/dashboard/organizer/add-camp",
       icon: <ListPlus />,
     },
     {
       label: "Manage Camps",
-      href: "organizer/manage-camps",
+      href: "/dashboard/organizer/manage-camps",
       icon: <ListChecks />,
     },
     {
       label: "Manage Registered Camps",
-      href: "organizer/registered-camps",
+      href: "/dashboard/organizer/registered-camps",
       icon: <BarChart2 />,
     },
-    { label: "Profile", href: "organizer/profile", icon: <User /> },
+    { label: "Profile", href: "/dashboard/organizer/profile", icon: <User /> },
   ];
 
   const PartNavLinks = [
-    { label: "Main Dashboard", href: "", icon: <LayoutDashboard /> },
+    { label: "Main Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
     {
       label: "Registered Camps",
-      href: "participant/registered-camps",
+      href: "/dashboard/participant/registered-camps",
       icon: <BarChart2 />,
     },
     {
       label: "Payment",
-      href: "participant/payment-history",
+      href: "/dashboard/participant/payment-history",
       icon: <CreditCard />,
     },
     {
       label: "Feedback",
-      href: "participant/feedback",
+      href: "/dashboard/participant/feedback",
       icon: <ListChecks />,
     },
     {
       label: "Profile",
-      href: "participant/profile",
+      href: "/dashboard/participant/profile",
       icon: <User />,
     },
   ];
@@ -70,19 +70,19 @@ export default function Sidebar() {
   const { SignOut } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignout = async () => {
-    setIsLoading(true);
-    try {
-      await SignOut();
-      toastSuccess("Successfully signed out!");
-      navigate("/signin", { replace: true });
-    } catch (error) {
-      console.error("Sign-out error:", error);
-      toastError(`Sign-out failed: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const handleSignout = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     await SignOut();
+  //     toastSuccess("Successfully signed out!");
+  //     navigate("/signin", { replace: true });
+  //   } catch (error) {
+  //     console.error("Sign-out error:", error);
+  //     toastError(`Sign-out failed: ${error.message}`);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="bg-white z-50">
@@ -147,7 +147,7 @@ export default function Sidebar() {
             {userRole === "Participant" && (
               <ul className="space-y-3">
                 {PartNavLinks.map((link, index) => (
-                   <li key={index}>
+                  <li key={index}>
                     <NavLink
                       to={link.href}
                       end

@@ -1,43 +1,44 @@
 import { motion } from "framer-motion";
 import useAuth from "../../../Hooks/useAuth";
-import { slideDown, slideUp } from "../../../Utility/animation";
-import { ArrowRight, ChevronRight, HomeIcon } from "lucide-react";
+import { slideDown } from "../../../Utility/animation";
+import { ChevronRight, HomeIcon } from "lucide-react";
+
 
 export default function Navbar() {
   const OrgNavLinks = [
-    { label: "Main Dashboard", href: "", },
+    { label: "Main Dashboard", href: "/dashboard",},
     {
       label: "Add Camp",
-      href: "organizer/add-camp",
+      href: "/dashboard/organizer/add-camp",
     },
     {
       label: "Manage Camps",
-      href: "organizer/manage-camps",
+      href: "/dashboard/organizer/manage-camps",
     },
     {
       label: "Manage Registered Camps",
-      href: "organizer/registered-camps",
+      href: "/dashboard/organizer/registered-camps",
     },
-    { label: "Profile", href: "organizer/profile" },
+    { label: "Profile", href: "/dashboard/organizer/profile", },
   ];
 
   const PartNavLinks = [
-    { label: "Main Dashboard", href: "" },
+    { label: "Main Dashboard", href: "/dashboard", },
     {
       label: "Registered Camps",
-      href: "participant/registered-camps",
+      href: "/dashboard/participant/registered-camps",
     },
     {
       label: "Payment",
-      href: "participant/payment-history",
+      href: "/dashboard/participant/payment-history",
     },
     {
       label: "Feedback",
-      href: "participant/feedback",
+      href: "/dashboard/participant/feedback",
     },
     {
       label: "Profile",
-      href: "participant/profile",
+      href: "/dashboard/participant/profile",
     },
   ];
 
@@ -65,8 +66,8 @@ export default function Navbar() {
             Register
           </li>
         </ol>
-        <h1 className="text-3xl font-semibold lexend tracking-wide ">
-          Register
+        <h1 className="active-route text-3xl font-semibold lexend tracking-wide ">
+          Register{" "}
         </h1>
       </div>
 
