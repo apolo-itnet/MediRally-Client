@@ -4,17 +4,18 @@ import Swal from "sweetalert2";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Link } from "react-router";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const ManageCamps = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
 
   // Fetch camps organized by the current user
-  // In your ManageCamps component
   const { data: camps = [], refetch } = useQuery({
     queryKey: ["camps", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/available-camps/${user?.email}`);
+      const res = await axiosPublic.get(`/organizer-camps/${user?.email}`);
       return res.data;
     },
   });
