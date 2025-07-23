@@ -7,6 +7,7 @@ import useAuth from "../../../Hooks/useAuth";
 import Loader from "../../../Shared/Loader/Loader";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 import { TbCoinTaka } from "react-icons/tb";
+import FeedbackModal from "./FeedbackModal";
 
 const RegisteredCamps = () => {
   const axiosSecure = useAxiosSecure();
@@ -77,9 +78,26 @@ const RegisteredCamps = () => {
   };
 
   const handleFeedback = (camp) => {
-    console.log("Open feedback modal:", camp);
-    // Add your logic to open the feedback modal
+    setSelectedCamp(camp);
+
+    // Optional fallback if modal doesn't toggle
+    const checkbox = document.getElementById("feedback_modal");
+    if (checkbox) checkbox.checked = true;
   };
+
+  // const handleClose = () => {
+  //   const checkbox = document.getElementById("feedback_modal");
+  //   if (checkbox) checkbox.checked = false;
+  //   onClose();
+  // };
+
+  const handleClose = () => {
+  const checkbox = document.getElementById("feedback_modal");
+  if (checkbox) checkbox.checked = false;
+  setSelectedCamp(null);
+  onClose();
+};
+
 
   if (isLoading)
     return (
@@ -155,7 +173,7 @@ const RegisteredCamps = () => {
 
                 <td className="px-4 py-2 text-sm">
                   {camp.paymentStatus === "Pay" ? (
-                    <CustomButton text="Pay" onClick={() => handlePay(camp)} />
+                    <SecondaryBtn label="Pay" text="Pay" onClick={() => handlePay(camp)} />
                   ) : (
                     <span className="text-green-600 font-semibold">Paid</span>
                   )}
@@ -172,25 +190,36 @@ const RegisteredCamps = () => {
                 </td>
                 <td className="px-4 py-2">
                   {/* {camp.paymentStatus === "Paid" ? (
-                    <SecondaryBtn
-                      text="Feedback"
+                    <label
+                      htmlFor="feedback_modal"
                       onClick={() => handleFeedback(camp)}
-                    />
+                      className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Feedback
+                    </label>
                   ) : (
                     <span className="text-gray-400">N/A</span>
                   )} */}
-                  <SecondaryBtn
-                    label="Feedback"
-                    type="button"
-                    showIcon={false}
-                    onClick={() => handleFeedback(camp)}
-                  />
+                   <label
+                      htmlFor="feedback_modal"
+                      onClick={() => handleFeedback(camp)}
+                      className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Feedback
+                    </label>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      
+      <FeedbackModal
+        selectedCamp={selectedCamp}
+        user={user}
+        onClose={handleClose}
+        onSuccess={(id) => setSubmittedFeedbackIds((prev) => [...prev, id])}
+      />
 
       {/* Pagination Controls */}
       <div className="flex justify-between items-center mt-4">

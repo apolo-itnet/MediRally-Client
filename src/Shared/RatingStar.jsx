@@ -4,7 +4,7 @@ import React from "react";
 const RatingStar = ({ filled, onClick, onMouseEnter, onMouseLeave }) => {
   return (
     <div>
-      <p className="cursor-pointer bg-teal-800 !p-3 rounded-full group">
+      <p className="cursor-pointer border border-rose-500 p-3 rounded-full group">
         {" "}
         <span className="text-amber-400 group-hover:text-white ease-out duration-300 transition-colors ">
           <Star
