@@ -20,7 +20,6 @@ import OrganizerProfile from "../Pages/Dashboard/Organizer/OrganizerProfile";
 
 // Participant Dashboard
 import ParticipantProfile from "../Pages/Dashboard/Participant/ParticipantProfile";
-import Feedback from "../Pages/Dashboard/Participant/Feedback";
 import Payment from "../Pages/Dashboard/Participant/Payment";
 import RegisteredCamps from "../Pages/Dashboard/Participant/RegisteredCamps";
 
@@ -32,6 +31,7 @@ import AvailableCamps from "../Pages/AvailableCamps";
 import CampDetailsPage from "../Pages/CampDetailsPage";
 import AboutUs from "../Pages/AboutUs";
 import ContactUs from "../Pages/ContactUs";
+import Feedback from "../Pages/Dashboard/Participant/Feedback";
 
 
 
@@ -138,7 +138,7 @@ const Router = createBrowserRouter([
             path: "feedback",
             element: (
               <RoleRoutes role="Participant">
-                <Feedback />
+                <Feedback/>
               </RoleRoutes>
             ),
           },

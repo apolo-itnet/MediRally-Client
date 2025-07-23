@@ -192,7 +192,7 @@ export default function Sidebar() {
               className="text-xs"
             />
 
-            <SecondaryBtn
+            {/* <SecondaryBtn
               onClick={handleSignout}
               type="button"
               label="Sign Out"
@@ -200,7 +200,7 @@ export default function Sidebar() {
               iconProps={{ size: 18 }}
               iconClassName="group-hover:rotate-0"
               className="text-xs"
-            />
+            /> */}
           </div>
         </div>
       </motion.div>

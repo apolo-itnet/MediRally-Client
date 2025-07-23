@@ -65,7 +65,7 @@ const JoinCampModal = ({
       <input type="checkbox" id="join-modal" className="modal-toggle" />
       <div className="modal lexend">
         <div className="modal-box max-w-4xl bg-zinc-50">
-          <h3 className="font-bold text-2xl mb-4">Join Camp</h3>
+          <h3 className="font-bold text-2xl mb-4">Register Camp</h3>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -84,6 +84,10 @@ const JoinCampModal = ({
               register={register}
               errors={errors}
               validation={{ required: "Age is required" }}
+              type="number"
+              min="1"
+              max="100"
+              placeholder="Enter your age"
             />
             <Input
               label="Phone Number"
@@ -91,6 +95,9 @@ const JoinCampModal = ({
               register={register}
               errors={errors}
               validation={{ required: "Phone is required" }}
+              placeholder="Your Phone Number"
+              type="tel"
+
             />
             <Select
               label="Gender"
@@ -99,16 +106,19 @@ const JoinCampModal = ({
               errors={errors}
               options={["Male", "Female", "Other"]}
               validation={{ required: "Gender is required" }}
+
             />
             <Input
               label="Emergency Contact (optional)"
               name="emergency"
               register={register}
               errors={errors}
+              placeholder="Emergency Contact Number"
+              type="tel"
             />
 
             <div className="modal-action col-span-2 justify-between items-center">
-              <label htmlFor="join-modal" className="btn">
+              <label htmlFor="join-modal" className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-semibold px-6 py-2 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm">
                 Close
               </label>
               <div className="flex flex-col items-end">

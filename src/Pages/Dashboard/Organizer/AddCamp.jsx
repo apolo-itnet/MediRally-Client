@@ -4,8 +4,6 @@ import {
   Calendar,
   MapPin,
   UserPlus,
-  DollarSign,
-  FileText,
   Image as ImageIcon,
   ClipboardSignature,
   UserCheck,
@@ -14,7 +12,8 @@ import {
   AlignLeft,
   Plus,
 } from "lucide-react";
-import { fadeIn, slideUp } from "../../../Utility/animation";
+import { TbCoinTaka } from "react-icons/tb";
+import { fadeIn } from "../../../Utility/animation";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 import axios from "axios";
 import useAuth from "../../../Hooks/useAuth";
@@ -23,6 +22,8 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const AddCamp = () => {
   const { user } = useAuth();
@@ -30,6 +31,8 @@ const AddCamp = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
 
   const {
     register,
@@ -54,12 +57,6 @@ const AddCamp = () => {
     setImagePreviews(previews);
   };
 
-  // const handleCategoryChange = (index, value) => {
-  //   const updated = [...imagePreviews];
-  //   updated[index].category = value;
-  //   setImagePreviews(updated);
-  // };
-
   const handleAddCamp = async (e) => {
     setLoading(true);
 
@@ -82,50 +79,49 @@ const AddCamp = () => {
     }
 
     try {
-      const uploadedImageData = [];
+      const uploadedImageData = await Promise.all(
+        imagePreviews.map(async (img) => {
+          const formData = new FormData();
+          formData.append("image", img.file);
 
-      for (const img of imagePreviews) {
-        const formData = new FormData();
-        formData.append("image", img.file);
+          const res = await axios.post(
+            `https://api.imgbb.com/1/upload?key=${
+              import.meta.env.VITE_img_key
+            }`,
+            formData
+          );
 
-        const res = await axios.post(
-          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
-          formData
-        );
-
-        if (res.data.success) {
-          uploadedImageData.push({
-            url: res.data.data.url,
-            category: img.category,
-          });
-        } else {
-          throw new Error("Upload failed");
-        }
-      }
+          if (res.data.success) {
+            return {
+              url: res.data.data.url,
+              category: img.category,
+            };
+          } else {
+            throw new Error("Upload failed");
+          }
+        })
+      );
 
       const newCamp = {
         campName,
-        images: uploadedImageData, // Now includes category
-        fees,
+        images: uploadedImageData,
+        fees: Number(fees),
         eventDateTime,
         venue,
         doctorName,
-        maxParticipants,
-        duration,
+        maxParticipants: Number(maxParticipants),
+        duration: Number(duration),
         description,
-        participantCount,
+        participantCount: 0,
         organizer: {
           name: user?.displayName,
           email: user?.email,
-          photo: user?.photoURL, 
+          photo: user?.photoURL,
         },
         createdAt: new Date().toISOString(),
       };
 
-      const saveRes = await axios.post(
-        `${import.meta.env.VITE_API_URL}/add-camp`,
-        newCamp
-      );
+      const saveRes = await axiosPublic.post("/add-camp", newCamp);
 
       if (saveRes.data.insertedId) {
         toastSuccess("Camp added successfully!");
@@ -180,13 +176,13 @@ const AddCamp = () => {
             Camp Fees <span className="text-red-500">*</span>
           </label>
           <div className="flex items-center gap-2">
-            <DollarSign size={18} className="text-gray-500" />
+            <TbCoinTaka size={26} className="text-gray-500" />
             <input
               type="number"
               step="any"
               {...register("fees", { required: true })}
               className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
-              placeholder="Enter camp fee"
+              placeholder="1234"
             />
           </div>
           {errors.fees && (

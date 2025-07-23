@@ -15,6 +15,9 @@ const RegisteredCamps = () => {
   const [searchText, setSearchText] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCamp, setSelectedCamp] = useState(null);
+  const [submittedFeedbackIds, setSubmittedFeedbackIds] = useState([]);
+
   const itemsPerPage = 10;
 
   const { data: camps = [], isLoading } = useQuery({
