@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Edit, ListPlus, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
 import useAuth from "../../../Hooks/useAuth";
@@ -11,6 +11,7 @@ const ManageCamps = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
+  const queryClient = useQueryClient();
 
   // Fetch camps organized by the current user
   const { data: camps = [], refetch } = useQuery({
@@ -22,8 +23,8 @@ const ManageCamps = () => {
   });
 
   // Handle delete camp
-  const handleDeleteCamp = (campId) => {
-    Swal.fire({
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -31,19 +32,19 @@ const ManageCamps = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await axiosSecure.delete(`/delete-camp/${campId}`);
-        if (res.data.deletedCount > 0) {
-          refetch();
-          Swal.fire({
-            title: "Deleted!",
-            text: "Camp has been deleted.",
-            icon: "success",
-          });
-        }
-      }
     });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.delete(`/available-camps/${id}`);
+        queryClient.invalidateQueries(["camps", user?.email]);
+        Swal.fire("Deleted!", "Camp has been deleted.", "success");
+        // Optionally refetch data or update UI
+      } catch (err) {
+        Swal.fire("Error!", "Failed to delete the camp.", "error");
+        console.error(err);
+      }
+    }
   };
 
   return (
@@ -87,7 +88,7 @@ const ManageCamps = () => {
                   <td className="py-4 px-4">{camp.doctorName}</td>
                   <td className="py-4 px-4 text-right">
                     <div className="flex justify-end space-x-2">
-                      <Link to={`/update-camp/${camp._id}`}>
+                      <Link to={`/dashboard/organizer/update-camp/${camp._id}`}>
                         <SecondaryBtn
                           label="Edit"
                           icon={Edit}
@@ -102,7 +103,7 @@ const ManageCamps = () => {
                         icon={Trash2}
                         iconPosition="left"
                         iconProps={{ size: 15 }}
-                        onClick={() => handleDeleteCamp(camp._id)}
+                        onClick={() => handleDelete(camp._id)}
                         className="Px-4 py-1 text-xs font-light"
                         iconClassName="group-hover:rotate-0"
                       />

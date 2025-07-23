@@ -32,6 +32,7 @@ import CampDetailsPage from "../Pages/CampDetailsPage";
 import AboutUs from "../Pages/AboutUs";
 import ContactUs from "../Pages/ContactUs";
 import Feedback from "../Pages/Dashboard/Participant/Feedback";
+import UpdateCamps from "../Pages/Dashboard/Organizer/UpdateCamps";
 
 
 
@@ -109,6 +110,14 @@ const Router = createBrowserRouter([
             element: (
               <RoleRoutes role="Organizer">
                 <ManageCamps />
+              </RoleRoutes>
+            ),
+          },
+          {
+            path: "update-camp/:id",
+            element: (
+              <RoleRoutes role="Organizer">
+                <UpdateCamps/>
               </RoleRoutes>
             ),
           },

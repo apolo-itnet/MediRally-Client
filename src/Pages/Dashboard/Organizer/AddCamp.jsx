@@ -66,6 +66,7 @@ const AddCamp = () => {
       eventDateTime,
       venue,
       doctorName,
+      doctorSpeciality,
       maxParticipants,
       duration,
       description,
@@ -109,6 +110,7 @@ const AddCamp = () => {
         eventDateTime,
         venue,
         doctorName,
+        doctorSpeciality,
         maxParticipants: Number(maxParticipants),
         duration: Number(duration),
         description,
@@ -152,7 +154,7 @@ const AddCamp = () => {
         className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs md:text-sm"
       >
         {/* Camp Name */}
-        <div className="md:col-span-2">
+        <div>
           <label className="label">
             Camp Name <span className="text-red-500">*</span>
           </label>
@@ -167,6 +169,44 @@ const AddCamp = () => {
           </div>
           {errors.campName && (
             <p className="text-red-500 text-sm">Camp name is required</p>
+          )}
+        </div>
+
+          {/* Healthcare Professional */}
+        <div>
+          <label className="label">
+            Healthcare Professional <span className="text-red-500">*</span>
+          </label>
+          <div className="flex items-center gap-2">
+            <UserCheck size={18} className="text-gray-500" />
+            <input
+              type="text"
+              {...register("doctorName", { required: true })}
+              className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
+              placeholder="Doctor Name"
+            />
+          </div>
+          {errors.doctorName && (
+            <p className="text-red-500 text-sm">This field is required</p>
+          )}
+        </div>
+
+          {/* Healthcare Speciality */}
+        <div>
+          <label className="label">
+            Healthcare Speciality <span className="text-red-500">*</span>
+          </label>
+          <div className="flex items-center gap-2">
+            <UserCheck size={18} className="text-gray-500" />
+            <input
+              type="text"
+              {...register("doctorSpeciality", { required: true })}
+              className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
+              placeholder="Speciality"
+            />
+          </div>
+          {errors.doctorName && (
+            <p className="text-red-500 text-sm">This field is required</p>
           )}
         </div>
 
@@ -190,24 +230,7 @@ const AddCamp = () => {
           )}
         </div>
 
-        {/* Healthcare Professional */}
-        <div>
-          <label className="label">
-            Healthcare Professional <span className="text-red-500">*</span>
-          </label>
-          <div className="flex items-center gap-2">
-            <UserCheck size={18} className="text-gray-500" />
-            <input
-              type="text"
-              {...register("doctorName", { required: true })}
-              className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
-              placeholder="Doctor/Nurse Name"
-            />
-          </div>
-          {errors.doctorName && (
-            <p className="text-red-500 text-sm">This field is required</p>
-          )}
-        </div>
+      
 
         {/* Location */}
         <div>
@@ -327,7 +350,7 @@ const AddCamp = () => {
                     className="w-12 h-12 object-cover rounded"
                   />
                   <select
-                    className="mt-2 select select-xs select-bordered w-full"
+                    className="mt-2 select select-xs select-bordered w-full border-rose-500  focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300"
                     value={img.category}
                     onChange={(e) => {
                       const updated = [...imagePreviews];
@@ -367,10 +390,10 @@ const AddCamp = () => {
         <div className="col-span-3 flex justify-center items-center py-2 ">
           <SecondaryBtn
             type="submit"
-            // label={loading ? "Creating..." : "Add Camp"}
-            label="Add Camp"
+            label={loading ? "Creating..." : "Add Camp"}
+            // label="Add Camp"
             icon={Plus}
-            loading={true}
+            // loading={true}
             iconClassName="group-hover:rotate-0"
             className="flex justify-center items-center py-2"
           />
