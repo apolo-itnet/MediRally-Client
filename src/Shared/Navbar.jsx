@@ -23,6 +23,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const handleSignout = async () => {
     setIsDropdownOpen(false);
@@ -64,7 +65,7 @@ const Navbar = () => {
           variants={slideDown(0.2)}
           initial="initial"
           animate="animate"
-          className="navbar flex flex-wrap justify-between items-center w-full res-pad"
+          className="navbar flex justify-between items-center w-full res-pad"
         >
           {/* Left (Mobile Menu + Logo) */}
           <div className="flex items-center justify-between w-full lg:hidden">
@@ -134,6 +135,7 @@ const Navbar = () => {
                     label="Sign Out"
                     icon={LogOut}
                     onClick={handleSignout}
+                    className="mt-4"
                   ></SecondaryBtn>
                 ) : (
                   <div className="flex  gap-2 mt-4 w-full">
@@ -149,7 +151,8 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Logo */}
-            <Link to="/" className="flex lg:hidden items-center gap-2">
+           {!user && (
+              <Link to="/" className="flex lg:hidden items-center gap-2">
               <img
                 src="https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"
                 alt="logo"
@@ -159,6 +162,7 @@ const Navbar = () => {
                 Medi <span className="text-green-500">Rally</span>
               </h1>
             </Link>
+           )}
           </div>
 
           {/* Desktop Center Menu */}
@@ -211,7 +215,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Avatar / Auth Buttons */}
-          <div className="flex items-center gap-4 lg:gap-6 mt-4 lg:mt-0 lg:ml-auto">
+          <div className="flex items-center gap-4 lg:gap-6 lg:mt-0 lg:ml-auto">
             {user ? (
               <div className="dropdown dropdown-end">
                 <label
@@ -259,14 +263,6 @@ const Navbar = () => {
                       </NavLink>
                     </li>
                   ))}
-                  <li className="w-full">
-                    <button
-                      onClick={handleSignout}
-                      className="text-xs w-full flex items-center gap-2 border border-zinc-400 px-3 py-3 rounded-md"
-                    >
-                      <FaSignOutAlt /> Signout
-                    </button>
-                  </li>
                 </ul>
               </div>
             ) : (

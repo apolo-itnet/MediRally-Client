@@ -10,19 +10,17 @@ import {
   HomeIcon,
   LogOut,
 } from "lucide-react";
-import { Link, NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
 import { slideRight } from "../../../Utility/animation";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../../Contexts/AuthContexts";
+import { useEffect, useState } from "react";
 import Loader from "../../../Shared/Loader/Loader";
-import { toastError, toastSuccess } from "../../../Utility/toastmsg";
 import { Toaster } from "react-hot-toast";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const OrgNavLinks = [
-    { label: "Main Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
+    { label: "Analytics", href: "/dashboard", icon: <LayoutDashboard /> },
     {
       label: "Add Camp",
       href: "/dashboard/organizer/add-camp",
@@ -42,7 +40,7 @@ export default function Sidebar() {
   ];
 
   const PartNavLinks = [
-    { label: "Main Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
+    { label: "Analytics", href: "/dashboard", icon: <LayoutDashboard /> },
     {
       label: "Registered Camps",
       href: "/dashboard/participant/registered-camps",
@@ -67,28 +65,39 @@ export default function Sidebar() {
 
   const { userRole } = useAuth();
   const navigate = useNavigate();
-  const { SignOut } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
-  // const handleSignout = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     await SignOut();
-  //     toastSuccess("Successfully signed out!");
-  //     navigate("/signin", { replace: true });
-  //   } catch (error) {
-  //     console.error("Sign-out error:", error);
-  //     toastError(`Sign-out failed: ${error.message}`);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
 
   return (
     <div className="bg-white z-50">
       {isLoading && <Loader />}
       <Toaster reverseOrder={false} />
-      <motion.div {...slideRight(0)} className="w-70 h-screen lexend">
+
+      {/* Overlay for small screens */}
+      <div
+        className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-300 lg:hidden ${
+          isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+        onClick={onClose}
+      />
+
+      <motion.div
+        {...slideRight(0)}
+        className={`lexend fixed top-0 left-0 h-screen w-[280px] bg-white z-50 shadow-lg transition-transform duration-300
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        lg:translate-x-0 lg:fixed lg:block`}
+      >
         <div className="flex flex-col justify-between w-full h-full">
           {/* Logo */}
           <div className="py-5 flex items-center justify-center border-b border-gray-300">
@@ -191,16 +200,6 @@ export default function Sidebar() {
               iconClassName="group-hover:rotate-0"
               className="text-xs"
             />
-
-            {/* <SecondaryBtn
-              onClick={handleSignout}
-              type="button"
-              label="Sign Out"
-              icon={LogOut}
-              iconProps={{ size: 18 }}
-              iconClassName="group-hover:rotate-0"
-              className="text-xs"
-            /> */}
           </div>
         </div>
       </motion.div>
