@@ -5,42 +5,6 @@ import { ChevronRight, HomeIcon } from "lucide-react";
 
 
 export default function Navbar() {
-  const OrgNavLinks = [
-    { label: "Main Dashboard", href: "/dashboard",},
-    {
-      label: "Add Camp",
-      href: "/dashboard/organizer/add-camp",
-    },
-    {
-      label: "Manage Camps",
-      href: "/dashboard/organizer/manage-camps",
-    },
-    {
-      label: "Manage Registered Camps",
-      href: "/dashboard/organizer/registered-camps",
-    },
-    { label: "Profile", href: "/dashboard/organizer/profile", },
-  ];
-
-  const PartNavLinks = [
-    { label: "Main Dashboard", href: "/dashboard", },
-    {
-      label: "Registered Camps",
-      href: "/dashboard/participant/registered-camps",
-    },
-    {
-      label: "Payment",
-      href: "/dashboard/participant/payment-history",
-    },
-    {
-      label: "Feedback",
-      href: "/dashboard/participant/feedback",
-    },
-    {
-      label: "Profile",
-      href: "/dashboard/participant/profile",
-    },
-  ];
 
   const { user } = useAuth();
 

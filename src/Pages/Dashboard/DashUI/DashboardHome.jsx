@@ -5,7 +5,7 @@ import { Users, Calendar, DollarSign } from "lucide-react";
 import { motion } from "framer-motion";
 
 const DashboardHome = () => {
-  const { user } = useAuth();
+  const { user, userRole } = useAuth();
 
   return (
     <div className="space-y-6 w-full">
@@ -15,6 +15,9 @@ const DashboardHome = () => {
         </motion.p>
         <motion.h1 {...slideRight(0.6)} className="text-4xl font-bold text-zinc-500 lexend">
           Welcome to your dashboard
+        </motion.h1>
+        <motion.h1 {...slideRight(0.6)} className="text-4xl font-bold text-zinc-500 lexend">
+          {userRole}
         </motion.h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-10">

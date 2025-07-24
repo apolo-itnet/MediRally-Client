@@ -1,5 +1,5 @@
-import { ArrowRight } from "lucide-react";
 import React from "react";
+import { ArrowRight } from "lucide-react";
 
 const SecondaryBtn = ({
   label = "Your Text",
@@ -22,7 +22,7 @@ const SecondaryBtn = ({
       type={type}
       disabled={disabled || loading}
       aria-label={label}
-      className={`cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed ${btnClassName} ${className}`}
+      className={`cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-semibold nunito px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed ${btnClassName} ${className}`}
     >
       <div className="relative flex items-center justify-center gap-2">
         {showIcon && iconPosition === "left" && !loading && IconComponent && (

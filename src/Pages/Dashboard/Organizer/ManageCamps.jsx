@@ -36,7 +36,7 @@ const ManageCamps = () => {
 
     if (result.isConfirmed) {
       try {
-        await axiosSecure.delete(`/available-camps/${id}`);
+        await axiosSecure.delete(`/delete-camps/${id}`);
         queryClient.invalidateQueries(["camps", user?.email]);
         Swal.fire("Deleted!", "Camp has been deleted.", "success");
       } catch (err) {

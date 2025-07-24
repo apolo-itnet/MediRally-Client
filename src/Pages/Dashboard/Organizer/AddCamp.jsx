@@ -114,7 +114,7 @@ const AddCamp = () => {
         maxParticipants: Number(maxParticipants),
         duration: Number(duration),
         description,
-        participantCount: 0,
+        participantCount: Number(participantCount),
         organizer: {
           name: user?.displayName,
           email: user?.email,

@@ -114,7 +114,7 @@ const JoinCampModal = ({
             />
 
             <div className="modal-action col-span-2 justify-between items-center">
-              <label htmlFor="join-modal" className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-semibold px-6 py-2 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm">
+              <label htmlFor="join-modal" className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-semibold px-6 py-3 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm">
                 Close
               </label>
               <div className="flex flex-col items-end">

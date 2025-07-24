@@ -1,11 +1,8 @@
 import {
   MapPin,
-  CalendarDays,
   DollarSign,
   Calendar,
-  User,
   Users,
-  UserCheck,
   Clock10,
   Stethoscope,
 } from "lucide-react";
@@ -18,7 +15,7 @@ import "swiper/css/effect-fade";
 import useAuth from "../../../Hooks/useAuth";
 
 const CampCard = ({ camp }) => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const { campName, images, _id } = camp;
 
   const sliderImages = images?.filter(
@@ -26,7 +23,7 @@ const CampCard = ({ camp }) => {
   );
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 group cursor-pointer">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 group cursor-pointer nunito text-sm">
       {/* Camp Image */}
       {images.length > 1 ? (
         <Swiper
@@ -47,7 +44,7 @@ const CampCard = ({ camp }) => {
               <img
                 src={img.url}
                 alt={campName}
-                className="w-full h-60 object-cover"
+                className="w-full h-40 md:h-60 object-cover"
               />
             </SwiperSlide>
           ))}
@@ -56,23 +53,23 @@ const CampCard = ({ camp }) => {
         <img
           src={images[0]?.url}
           alt={campName}
-          className="w-full h-60 object-cover rounded-md"
+          className="w-full h-40 md:h-60 object-cover rounded-md"
         />
       )}
 
       {/* Camp Details */}
       <div className="p-4">
         <div className="border-r-3 border-transparent group-hover:border-rose-500 transition-colors duration-300 ease-in-out ">
-          <h2 className="text-xl font-bold text-gray-800">{campName}</h2>
+          <h2 className="text-xl font-bold text-gray-800 line-clamp-1">{campName}</h2>
+
+          <div>
+            <p className=" text-gray-400 py-2 pr-2">
+              {camp.description?.slice(0, 100)}...
+            </p>
+          </div>
         </div>
 
-        <div>
-          <p className="text-sm text-gray-400 py-2">
-            {camp.description?.slice(0, 100)}...
-          </p>
-        </div>
-
-        <div className="mt-2 space-y-2 text-sm">
+        <div className="mt-2 space-y-2 ">
           <p className="flex items-center text-gray-600 font-bold text-base">
             <Stethoscope size={16} className="mr-2 text-rose-500 " />
             {camp.doctorName}
@@ -110,19 +107,17 @@ const CampCard = ({ camp }) => {
               </p>
             )}
           </div>
-          
+
           {/* <p className="flex items-center text-gray-600">
             <UserCheck size={16} className="mr-2 text-rose-500" />
             Attend Participants: {camp.participantCount}
           </p> */}
-
-          
         </div>
 
         {/* Action Buttons */}
         <div className="mt-4 flex justify-between">
           <Link to={`/available-camps/${_id}`}>
-            <SecondaryBtn label="View Details" className="w-full" />
+            <SecondaryBtn label="View Details" />
           </Link>
         </div>
       </div>

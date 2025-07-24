@@ -30,11 +30,10 @@ const CampDetailsPage = () => {
   const { user, userRole } = useAuth();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
-  const [alreadyJoined, setAlreadyJoined] = useState(false);
-  const [participantCounts, setParticipantCounts] = useState(0);
   const queryClient = useQueryClient();
+  // const [alreadyJoined, setAlreadyJoined] = useState(false);
 
-  // Get camp details                           
+  // Get camp details by ID
   const { data: camp = {}, isLoading } = useQuery({
     queryKey: ["campDetails", id],
     queryFn: async () => {
@@ -42,28 +41,29 @@ const CampDetailsPage = () => {
       return res.data;
     },
   });
-  
-  // Get camp registrations
-  const { data: registrations = [] } = useQuery({
-    queryKey: ["campRegistrations"],
+
+  // Get all camps
+  const { data: camps = [] } = useQuery({
+    // enabled: !loading && !!user,
+    queryKey: ["available-camps"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/register-camp");
+      const res = await axiosPublic.get("/available-camps");
       return res.data;
     },
   });
 
-  // Check if user is already joined
-  useEffect(() => {
-    if (camp && registrations.length > 0) {
-      const userReg = registrations.find(
-        (reg) => reg.campId === id && reg.participant?.email === user?.email
+  //
+  const { data: joinedData = {} } = useQuery({
+    queryKey: ["isJoined", id, user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosPublic.get(
+        `/register-camp/is-joined/${id}?email=${user?.email}`
       );
-      setAlreadyJoined(!!userReg);
-
-      const count = registrations.filter((reg) => reg.campId === id).length;
-      setParticipantCounts(count);
-    }
-  }, [camp, registrations, id, user]);
+      return res.data;
+    },
+  });
+  const alreadyJoined = joinedData.joined;
 
   if (isLoading) {
     return (
@@ -99,11 +99,12 @@ const CampDetailsPage = () => {
   // Check if user can join
   const isDisabled = !user || userRole === "Organizer" || alreadyJoined;
 
+  const participantCounts = camp?.participantCount || 0;
+
   // Handle join
   const handleSuccessJoin = () => {
-    setParticipantCounts((prev) => prev + 1);
-    setAlreadyJoined(true);
-    queryClient.invalidateQueries(["campRegistrations"]);
+    queryClient.invalidateQueries(["campDetails", id]);
+    // setAlreadyJoined(true);
   };
 
   return (
@@ -142,15 +143,26 @@ const CampDetailsPage = () => {
         <div>
           <label
             htmlFor="join-modal"
-            className={`btn mt-4 ${isDisabled ? "btn-disabled" : "btn-primary"}`}
+            className={`btn mt-4 group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-6 py-3 rounded-full transition-all duration-200 ease-in-out shadow-none border-none ${
+              isDisabled ? "btn-disabled" : "btn-primary"
+            }`}
           >
             {alreadyJoined ? "Already Joined" : "Join Camp"}
           </label>
 
+          {/* 🔒 Show message if user not signed in */}
+          {!user && (
+            <p className="mt-2 text-yellow-600 text-sm">
+              Please signup or sign in to join this camp.
+            </p>
+          )}
+
+          {/* ❌ If Organizer tries to join */}
           {userRole === "Organizer" && (
             <p className="mt-2 text-rose-600 text-sm">Organizer can't join.</p>
           )}
 
+          {/* ✅ Already joined message */}
           {alreadyJoined && (
             <p className="mt-2 text-rose-500 text-sm">
               ✅ Check your dashboard to confirm payment and participation.
@@ -164,7 +176,7 @@ const CampDetailsPage = () => {
           user={user}
           axiosSecure={axiosSecure}
           alreadyJoined={alreadyJoined}
-          setAlreadyJoined={setAlreadyJoined}
+          // setAlreadyJoined={setAlreadyJoined}
           onSuccess={handleSuccessJoin}
         />
       </motion.div>

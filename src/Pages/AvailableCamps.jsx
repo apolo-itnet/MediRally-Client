@@ -40,7 +40,7 @@ const AvailableCamps = () => {
     <section className="max-w-7xl mx-auto px-4 py-10">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         {/* 🔍 Search Input */}
-        <div className="flex items-center border rounded-md px-3 py-2 w-full md:w-1/2 shadow-sm">
+        <div className="flex items-center px-3 py-2 w-full md:w-1/2 shadow-sm  transition-all duration-300 rounded-full">
           <Search className="w-5 h-5 text-gray-500" />
           <input
             type="text"
@@ -52,10 +52,10 @@ const AvailableCamps = () => {
         </div>
 
         {/* 🔽 Sorting Dropdown */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <select
             onChange={(e) => setSortBy(e.target.value)}
-            className="border px-3 py-2 rounded-md shadow-sm"
+            className="border-transparent px-3 py-2 rounded-md shadow-sm cursor-pointer"
           >
             <option value="">Sort By</option>
             <option value="registered">Most Registered</option>
@@ -66,7 +66,7 @@ const AvailableCamps = () => {
           {/* 🧱 Grid Toggle */}
           <button
             onClick={() => setGridCols(gridCols === 3 ? 2 : 3)}
-            className="border px-3 py-2 rounded-md shadow-sm"
+            className="border-transparent px-3 py-2 rounded-md shadow-sm"
           >
             {gridCols === 3 ? <Rows2 size={20} /> : <Rows3 size={20} />}
           </button>

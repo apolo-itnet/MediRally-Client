@@ -268,7 +268,7 @@ const SignUp = () => {
           label={loading ? "Creating..." : "Sign Up"}
           type="submit"
           disabled={loading}
-          className="w-full py-3 font-medium flex justify-center items-center gap-2"
+          className="w-full flex justify-center items-center gap-2"
         >
           {loading && <Loader2 className="animate-spin" size={18} />}
           {loading ? "Creating..." : "Sign Up"}

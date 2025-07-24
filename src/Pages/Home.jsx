@@ -1,12 +1,16 @@
 import React from 'react';
 import BannerSlider from './Component/BannerSlider/BannerSlider';
+import CampSection from './Component/Home/CampSection';
 
-const Home = () => {
-  return (
+const Home = () => (
+  <>
     <section>
-      <BannerSlider/>
+      <BannerSlider />
     </section>
-  );
-};
+    <section>
+      <CampSection />
+    </section>
+  </>
+);
 
 export default Home;
