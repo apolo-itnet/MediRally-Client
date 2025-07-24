@@ -27,24 +27,23 @@ const defaultDoctorImg = "https://i.postimg.cc/7ZR2SwvK/physician-doctor.png";
 
 const CampDetailsPage = () => {
   const { id } = useParams();
-  const { user, role } = useAuth();
+  const { user, userRole } = useAuth();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const [alreadyJoined, setAlreadyJoined] = useState(false);
   const [participantCounts, setParticipantCounts] = useState(0);
   const queryClient = useQueryClient();
 
-  const {
-    data: camp = {},
-    isLoading,
-  } = useQuery({
+  // Get camp details                           
+  const { data: camp = {}, isLoading } = useQuery({
     queryKey: ["campDetails", id],
     queryFn: async () => {
       const res = await axiosPublic.get(`/available-camps/${id}`);
       return res.data;
     },
   });
-
+  
+  // Get camp registrations
   const { data: registrations = [] } = useQuery({
     queryKey: ["campRegistrations"],
     queryFn: async () => {
@@ -53,6 +52,7 @@ const CampDetailsPage = () => {
     },
   });
 
+  // Check if user is already joined
   useEffect(() => {
     if (camp && registrations.length > 0) {
       const userReg = registrations.find(
@@ -73,6 +73,7 @@ const CampDetailsPage = () => {
     );
   }
 
+  // Destructure
   const {
     campName,
     images = [],
@@ -80,20 +81,25 @@ const CampDetailsPage = () => {
     eventDateTime,
     venue,
     doctorName,
+    doctorSpeciality,
     maxParticipants,
     duration,
     description,
   } = camp;
 
+  // Get doctor image
   const doctorImage =
     images.find((img) => img.category === "Doctor")?.url || defaultDoctorImg;
 
+  // Get slider images
   const sliderImages = images.filter(
     (img) => img.category === "Banner" || img.category === "Other"
   );
 
-  const isDisabled = !user || role === "organizer" || alreadyJoined;
+  // Check if user can join
+  const isDisabled = !user || userRole === "Organizer" || alreadyJoined;
 
+  // Handle join
   const handleSuccessJoin = () => {
     setParticipantCounts((prev) => prev + 1);
     setAlreadyJoined(true);
@@ -136,14 +142,17 @@ const CampDetailsPage = () => {
         <div>
           <label
             htmlFor="join-modal"
-            className={`btn mt-4 ${
-              isDisabled ? "btn-disabled" : "btn-primary"
-            }`}
+            className={`btn mt-4 ${isDisabled ? "btn-disabled" : "btn-primary"}`}
           >
             {alreadyJoined ? "Already Joined" : "Join Camp"}
           </label>
+
+          {userRole === "Organizer" && (
+            <p className="mt-2 text-rose-600 text-sm">Organizer can't join.</p>
+          )}
+
           {alreadyJoined && (
-            <p className="mt-2 text-green-600 text-sm">
+            <p className="mt-2 text-rose-500 text-sm">
               ✅ Check your dashboard to confirm payment and participation.
             </p>
           )}
@@ -209,7 +218,9 @@ const CampDetailsPage = () => {
           />
           <div>
             <h3 className="font-semibold">{doctorName || "Not Assigned"}</h3>
-            <p className="text-sm text-gray-500">Camp Specialist</p>
+            <p className="text-sm text-gray-500">
+              {doctorSpeciality || "Camp Specialist"}
+            </p>
           </div>
         </div>
 

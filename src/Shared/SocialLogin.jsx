@@ -11,8 +11,6 @@ const SocialLogin = ({ from }) => {
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
-      console.log("button kaj korche?", signInWithGoogle);
-
       toastSuccess("Successfully signed up in Google!");
       navigate(from || "/");
     } catch (error) {
@@ -23,13 +21,10 @@ const SocialLogin = ({ from }) => {
 
   return (
     <div>
-    {/* Social Login Button */}
+      {/* Social Login Button */}
       <div className="flex flex-col gap-2">
         {/* Google */}
-        <button
-          onClick={handleGoogleLogin}
-          className="btn py-5 bg-transparent"
-        >
+        <button onClick={handleGoogleLogin} className="btn py-5 bg-transparent">
           <img
             src={
               "https://i.postimg.cc/zXtwGs8Y/google-favicon-logo-brandlogos-net-cgzfg-512x524.png"

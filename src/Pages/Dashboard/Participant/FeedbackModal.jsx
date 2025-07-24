@@ -29,8 +29,6 @@ const FeedbackModal = ({ selectedCamp, user, onClose, onSuccess }) => {
       createAt: new Date().toISOString(),
     };
 
-    console.log("Feedback Payload:", feedbackPayload);
-
     try {
       const res = await axiosSecure.post("/feedback", feedbackPayload);
 

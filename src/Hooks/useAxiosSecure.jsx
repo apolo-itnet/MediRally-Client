@@ -19,7 +19,7 @@ const setupInterceptors = (navigate) => {
     (res) => res,
     (err) => {
       if (err.response?.status === 401 || err.response?.status === 403) {
-        navigate("/", { replace: true });
+        navigate("/signin", { replace: true });
       }
       return Promise.reject(err);
     }

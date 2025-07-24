@@ -42,8 +42,6 @@ const JoinCampModal = ({
     };
 
     try {
-      console.log(" Registration Data:", registrationData);
-
       const res = await axiosSecure.post("/register-camp", registrationData);
       if (res.data.insertedId) {
         toastSuccess("Successfully joined the camp");

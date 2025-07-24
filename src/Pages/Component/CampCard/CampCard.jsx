@@ -7,6 +7,7 @@ import {
   Users,
   UserCheck,
   Clock10,
+  Stethoscope,
 } from "lucide-react";
 import { Link } from "react-router";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
@@ -25,7 +26,7 @@ const CampCard = ({ camp }) => {
   );
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 group">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 group cursor-pointer">
       {/* Camp Image */}
       {images.length > 1 ? (
         <Swiper
@@ -61,7 +62,7 @@ const CampCard = ({ camp }) => {
 
       {/* Camp Details */}
       <div className="p-4">
-        <div>
+        <div className="border-r-3 border-transparent group-hover:border-rose-500 transition-colors duration-300 ease-in-out ">
           <h2 className="text-xl font-bold text-gray-800">{campName}</h2>
         </div>
 
@@ -73,7 +74,7 @@ const CampCard = ({ camp }) => {
 
         <div className="mt-2 space-y-2 text-sm">
           <p className="flex items-center text-gray-600 font-bold text-base">
-            <User size={16} className="mr-2 text-rose-500 " />
+            <Stethoscope size={16} className="mr-2 text-rose-500 " />
             {camp.doctorName}
           </p>
 
