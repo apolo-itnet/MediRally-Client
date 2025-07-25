@@ -78,6 +78,7 @@ export default function Sidebar({ isOpen, onClose }) {
       document.body.style.overflow = "auto";
     };
   }, [isOpen]);
+  
 
   return (
     <div className="bg-white z-50">

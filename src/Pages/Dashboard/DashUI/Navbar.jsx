@@ -4,12 +4,15 @@ import { slideDown, slideLeft } from "../../../Utility/animation";
 import { ChevronRight, HomeIcon, Menu, User } from "lucide-react";
 import useAuth from "../../../Hooks/useAuth";
 import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 export default function Navbar({ setSidebarOpen }) {
   const location = useLocation();
   const { user, userRole } = useAuth();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef();
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -32,6 +35,15 @@ export default function Navbar({ setSidebarOpen }) {
   const routeName = routePath
     ? routePath.charAt(0).toUpperCase() + routePath.slice(1)
     : "Dashboard";
+
+  const { data: userInfo = {}, refetch } = useQuery({
+    queryKey: ["userProfile", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${user.email}`);
+      return res.data;
+    },
+  });
 
   return (
     <motion.div
@@ -85,7 +97,7 @@ export default function Navbar({ setSidebarOpen }) {
             <div className="w-9 rounded-full ring ring-sky-400 ring-offset-base-100 ring-offset-2">
               <img
                 src={
-                  user?.photoURL || "https://i.postimg.cc/C5kPH183/user-2.png"
+                  userInfo?.photo || "https://i.postimg.cc/C5kPH183/user-2.png"
                 }
                 alt="User"
                 className="w-full h-full rounded-full"
@@ -94,7 +106,10 @@ export default function Navbar({ setSidebarOpen }) {
           </div>
 
           {showDropdown && (
-            <motion.div {...slideLeft(0)} className="absolute right-0 mt-2 w-48 bg-white border-transparent rounded-md shadow-md z-30 p-3">
+            <motion.div
+              {...slideLeft(0)}
+              className="absolute right-0 mt-2 w-48 bg-white border-transparent rounded-md shadow-md z-30 p-3"
+            >
               <div className="flex items-center gap-2 mb-2">
                 <User size={16} />
                 <p className="text-sm font-semibold truncate">
