@@ -23,13 +23,14 @@ const JoinCampModal = ({
     reset,
   } = useForm();
 
-    const onSubmit = async (data) => {
+  const onSubmit = async (data) => {
     const registrationData = {
       campId: camp._id,
       campName: camp.campName,
       campFees: camp.fees,
       location: camp.venue,
       doctorName: camp.doctorName,
+      organizerEmail: camp.organizerEmail,
       participant: {
         name: user.displayName,
         email: user.email,
@@ -38,20 +39,38 @@ const JoinCampModal = ({
         gender: data.gender,
         emergencyContact: data.emergency,
       },
+      paymentStatus: "Pay",
+      confirmationStatus: "Pending",
       joinedAt: new Date().toISOString(),
     };
 
     try {
       const res = await axiosSecure.post("/register-camp", registrationData);
-      if (res.data.insertedId) {
+
+      const insertedId = res?.data?.insertedId;
+
+      if (insertedId) {
         toastSuccess("Successfully joined the camp");
+
+        // Close modal
+        document.getElementById("join-modal").checked = false;
+
+        // Reset form
         reset();
         setAlreadyJoined(true);
-        onSuccess();
+
+        // Invalidate cache
         queryClient.invalidateQueries(["camp-registrations"]);
-        document.getElementById("join-modal").checked = false; 
+
+        // Safely call onSuccess if defined
+        if (typeof onSuccess === "function") {
+          onSuccess();
+        }
+      } else {
+        throw new Error("No insertedId returned");
       }
     } catch (err) {
+      console.error("❌ Registration error:", err);
       toastError("Failed to join the camp");
     }
   };
@@ -93,7 +112,6 @@ const JoinCampModal = ({
               validation={{ required: "Phone is required" }}
               placeholder="Your Phone Number"
               type="tel"
-
             />
             <Select
               label="Gender"
@@ -102,7 +120,6 @@ const JoinCampModal = ({
               errors={errors}
               options={["Male", "Female", "Other"]}
               validation={{ required: "Gender is required" }}
-
             />
             <Input
               label="Emergency Contact (optional)"
@@ -114,7 +131,10 @@ const JoinCampModal = ({
             />
 
             <div className="modal-action col-span-2 justify-between items-center">
-              <label htmlFor="join-modal" className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-semibold px-6 py-3 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm">
+              <label
+                htmlFor="join-modal"
+                className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-semibold px-6 py-3 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm"
+              >
                 Close
               </label>
               <div className="flex flex-col items-end">

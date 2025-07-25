@@ -86,7 +86,7 @@ const CampCard = ({ camp }) => {
             {camp.venue}
           </p>
 
-          <div className="flex justify-between items-center ">
+          <div className="flex flex-wrap justify-between items-center ">
             <p className="flex items-center text-gray-600">
               <Calendar size={16} className="mr-2 text-rose-500" />
               {new Date(camp.eventDateTime).toLocaleDateString()}

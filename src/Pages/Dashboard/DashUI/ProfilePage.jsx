@@ -47,7 +47,7 @@ const ProfilePage = () => {
       return res.data;
     },
   });
-  
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -109,6 +109,50 @@ const ProfilePage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center gap-3 overflow-hidden lexend text-sm w-full">
+      {/* Read-only Left Card - Mobile Version */}
+      <motion.div
+        {...slideLeft(0)}
+        className="flex flex-col items-center justify-center bg-white rounded-2xl shadow p-4 text-center space-y-6 lg:hidden w-full"
+      >
+        <img
+          src={userInfo?.photo || "/avatar.png"}
+          alt="profile"
+          className="w-32 h-32 object-cover rounded-md mx-auto"
+        />
+        <div className="space-y-6 flex flex-col items-start w-full">
+          <div className="flex flex-col items-start">
+            <h2 className="text-xl font-semibold flex justify-center items-center gap-2 text-center">
+              <User className="w-5 text-rose-500" />
+              {userInfo?.name}
+            </h2>
+          </div>
+          <div>
+            <h2 className="text-left font-semibold">Email</h2>
+            <p className="text-sm text-gray-500 flex justify-center items-center gap-2">
+              <Mail className="w-4 text-rose-500" />
+              {userInfo?.email}
+            </p>
+          </div>
+          <div>
+            <h1 className="text-left font-semibold">Sign Up Time</h1>
+            <p className="text-sm text-gray-500 flex justify-center items-center gap-2">
+              <CalendarDays className="w-4 text-rose-500" />
+              {new Date(userInfo?.createdAt).toLocaleString()}
+            </p>
+          </div>
+          <div>
+            <h1 className="text-left font-semibold">Role</h1>
+            <p className="text-sm font-medium capitalize">{userInfo?.role}</p>
+          </div>
+        </div>
+        <SecondaryBtn
+          label={showEdit ? "Cancel Edit" : "Edit Profile"}
+          icon={showEdit ? X : Pencil}
+          iconClassName="group-hover:rotate-0"
+          onClick={() => setShowEdit((prev) => !prev)}
+        />
+      </motion.div>
+
       {/* Read-only Left Card - desktop version */}
       <motion.div
         {...slideDown(0)}

@@ -31,7 +31,7 @@ const CampDetailsPage = () => {
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
-  // const [alreadyJoined, setAlreadyJoined] = useState(false);
+  const [alreadyJoined, setAlreadyJoined] = useState(false);
 
   // Get camp details by ID
   const { data: camp = {}, isLoading } = useQuery({
@@ -63,7 +63,12 @@ const CampDetailsPage = () => {
       return res.data;
     },
   });
-  const alreadyJoined = joinedData.joined;
+  // const alreadyJoined = joinedData.joined;
+  useEffect(() => {
+    if (joinedData?.joined !== undefined) {
+      setAlreadyJoined(joinedData.joined);
+    }
+  }, [joinedData]);
 
   if (isLoading) {
     return (
@@ -174,10 +179,12 @@ const CampDetailsPage = () => {
         <JoinCampModal
           camp={camp}
           user={user}
-          axiosSecure={axiosSecure}
+          onSuccess={() => {
+            queryClient.invalidateQueries(["registered-camps", user.email]);
+            setAlreadyJoined(true);
+          }}
           alreadyJoined={alreadyJoined}
-          // setAlreadyJoined={setAlreadyJoined}
-          onSuccess={handleSuccessJoin}
+          setAlreadyJoined={setAlreadyJoined}
         />
       </motion.div>
 

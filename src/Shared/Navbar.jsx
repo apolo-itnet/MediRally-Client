@@ -17,12 +17,24 @@ import Loader from "./Loader/Loader";
 import { AuthContext } from "../Contexts/AuthContexts";
 import SecondaryBtn from "./Button/SecondaryBtn";
 import PrimaryBtn from "./Button/PrimaryBtn";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
   const { user, SignOut } = use(AuthContext);
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const axiosSecure = useAxiosSecure();
+
+  const { data: userInfo = {}, refetch } = useQuery({
+      queryKey: ["userProfile", user?.email],
+      enabled: !!user?.email,
+      queryFn: async () => {
+        const res = await axiosSecure.get(`/users/${user.email}`);
+        return res.data;
+      },
+    });
   
 
   const handleSignout = async () => {
@@ -101,7 +113,7 @@ const Navbar = () => {
                 </Link>
 
                 {/* Nav Links */}
-                <ul className="text-xs font-medium flex flex-col items-start gap-2 py-4 border-y border-zinc-200 w-full">
+                <ul className="text-xs font-medium flex flex-col items-start gap-2 py-4 border-t border-zinc-200 w-full">
                   {navLinks.map((link, index) => (
                     <li  key={index}>
                       <NavLink
@@ -135,8 +147,8 @@ const Navbar = () => {
                     label="Sign Out"
                     icon={LogOut}
                     onClick={handleSignout}
-                    className="mt-4"
-                  ></SecondaryBtn>
+                    className="mt-4 hidden"
+                  />
                 ) : (
                   <div className="flex  gap-2 mt-4 w-full">
                     <Link to="/signin">
@@ -227,7 +239,7 @@ const Navbar = () => {
                     {user.photoURL ? (
                       <img
                         src={
-                          user?.photoURL ||
+                          userInfo?.photo ||
                           "https://i.postimg.cc/C5kPH183/user-2.png"
                         }
                         alt="User"
@@ -263,6 +275,13 @@ const Navbar = () => {
                       </NavLink>
                     </li>
                   ))}
+                     <SecondaryBtn
+                    label="Sign Out"
+                    icon={LogOut}
+                    onClick={handleSignout}
+                    className="mt-4"
+                    iconClassName="group-hover:rotate-0"
+                  />
                 </ul>
               </div>
             ) : (

@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
-
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaSearch } from "react-icons/fa";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
@@ -8,10 +7,12 @@ import Loader from "../../../Shared/Loader/Loader";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 import { TbCoinTaka } from "react-icons/tb";
 import FeedbackModal from "./FeedbackModal";
+import Swal from "sweetalert2";
 
 const RegisteredCamps = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const [searchText, setSearchText] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -69,12 +70,56 @@ const RegisteredCamps = () => {
   };
 
   // Placeholder functions
-  const handlePay = (camp) => {
-    console.log("Redirect to payment:", camp);
+  const handlePay = async (camp) => {
+    try {
+      const res = await axiosSecure.post("/create-payment-intent", {
+        campId: camp._id,
+        amount: camp.campFees,
+        userEmail: user.email,
+      });
+
+      // Redirect to Stripe checkout
+      window.location.href = res.data.url;
+    } catch (error) {
+      toast.error("Payment failed");
+    }
   };
 
-  const handleCancel = (camp) => {
-    console.log("Cancel camp:", camp);
+  const handleCancel = async (id) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const res = await axiosSecure.delete(`/register-camp/${id}`);
+
+        if (res.status === 200 && res.data?.deletedCount > 0) {
+          await Swal.fire({
+            title: "Cancelled!",
+            text: "Your registration has been cancelled.",
+            icon: "success",
+          });
+
+          queryClient.invalidateQueries(["registered-camps", user?.email]);
+        } else {
+          throw new Error("Cancel failed");
+        }
+      } catch (err) {
+        console.error("Cancel error", err);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to cancel registration.",
+          icon: "error",
+        });
+      }
+    }
   };
 
   const handleFeedback = (camp) => {
@@ -85,19 +130,12 @@ const RegisteredCamps = () => {
     if (checkbox) checkbox.checked = true;
   };
 
-  // const handleClose = () => {
-  //   const checkbox = document.getElementById("feedback_modal");
-  //   if (checkbox) checkbox.checked = false;
-  //   onClose();
-  // };
-
   const handleClose = () => {
-  const checkbox = document.getElementById("feedback_modal");
-  if (checkbox) checkbox.checked = false;
-  setSelectedCamp(null);
-  onClose();
-};
-
+    const checkbox = document.getElementById("feedback_modal");
+    if (checkbox) checkbox.checked = false;
+    setSelectedCamp(null);
+    onClose();
+  };
 
   if (isLoading)
     return (
@@ -108,16 +146,14 @@ const RegisteredCamps = () => {
 
   return (
     <div className="p-5 w-full mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Registered Camps</h2>
-
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-        <div className="flex items-center border border-gray-300 rounded px-3 py-1">
+        <div className="flex items-center border border-zinc-300 hover:border-rose-500 transition-colors duration-300 ease-in-out rounded px-3 py-1 ">
           <FaSearch className="text-gray-400 mr-2" />
           <input
             type="text"
             placeholder="Search by camp or doctor"
-            className="outline-none"
+            className="w-full focus:outline-none p-2"
             onChange={(e) => {
               setSearchText(e.target.value);
               setCurrentPage(1);
@@ -130,7 +166,7 @@ const RegisteredCamps = () => {
             setFilterStatus(e.target.value);
             setCurrentPage(1);
           }}
-          className="border px-3 py-1 rounded"
+          className="border border-zinc-300 hover:border-rose-500 transition-colors duration-300 ease-in-out px-3 py-1 rounded"
         >
           <option value="all">All Payment Status</option>
           <option value="Paid">Paid</option>
@@ -173,7 +209,13 @@ const RegisteredCamps = () => {
 
                 <td className="px-4 py-2 text-sm">
                   {camp.paymentStatus === "Pay" ? (
-                    <SecondaryBtn label="Pay" text="Pay" onClick={() => handlePay(camp)} />
+                    <SecondaryBtn
+                      label="Pay"
+                      text="Pay"
+                      onClick={() => handlePay(camp)}
+                      showIcon={false}
+                      className="px-8 py-1"
+                    />
                   ) : (
                     <span className="text-green-600 font-semibold">Paid</span>
                   )}
@@ -185,11 +227,12 @@ const RegisteredCamps = () => {
                     text="Cancel"
                     showIcon={false}
                     disabled={camp.paymentStatus === "Paid"}
-                    onClick={() => handleCancel(camp)}
+                    onClick={() => handleCancel(camp._id)}
+                    className="px-6 py-1"
                   />
                 </td>
                 <td className="px-4 py-2">
-                  {/* {camp.paymentStatus === "Paid" ? (
+                  {camp.paymentStatus === "Paid" ? (
                     <label
                       htmlFor="feedback_modal"
                       onClick={() => handleFeedback(camp)}
@@ -199,21 +242,21 @@ const RegisteredCamps = () => {
                     </label>
                   ) : (
                     <span className="text-gray-400">N/A</span>
-                  )} */}
-                   <label
-                      htmlFor="feedback_modal"
-                      onClick={() => handleFeedback(camp)}
-                      className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Feedback
-                    </label>
+                  )}
+                  {/* <label
+                    htmlFor="feedback_modal"
+                    onClick={() => handleFeedback(camp)}
+                    className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Feedback
+                  </label> */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      
+
       <FeedbackModal
         selectedCamp={selectedCamp}
         user={user}

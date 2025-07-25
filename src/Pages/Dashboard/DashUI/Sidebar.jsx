@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, onClose }) {
     },
     {
       label: "Manage Registered Camps",
-      href: "/dashboard/organizer/registered-camps",
+      href: "/dashboard/organizer/manage-registered-camps",
       icon: <BarChart2 />,
     },
     { label: "Profile", href: "/dashboard/organizer/profile", icon: <User /> },

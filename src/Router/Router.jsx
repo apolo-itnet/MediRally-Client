@@ -122,7 +122,7 @@ const Router = createBrowserRouter([
             ),
           },
           {
-            path: "registered-camps",
+            path: "manage-registered-camps",
             element: (
               <RoleRoutes role="Organizer">
                 <ManageRegisteredCamps />
