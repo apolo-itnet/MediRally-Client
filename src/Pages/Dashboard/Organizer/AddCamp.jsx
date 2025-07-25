@@ -303,27 +303,7 @@ const AddCamp = () => {
           </div>
         </div>
 
-        {/* Image URL */}
-        {/* <div>
-          <label className="label">
-            Image URL <span className="text-red-500">*</span>
-          </label>
-          <div className="flex items-center gap-2">
-            <ImageIcon size={18} className="text-gray-500" />
-            <input
-              type="file"
-              {...register("image", { required: "Profile picture required" })}
-              accept="image/*"
-              multiple
-              onChange={handleImageChange}
-              className="file-input file-input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
-            />
-          </div>
-          {errors.image && (
-            <p className="text-red-500 text-sm">at least one image required</p>
-          )}
-        </div> */}
-
+        {/* Image */}
         <div className="relative">
           <label className="label">
             Upload Images <span className="text-red-500">*</span>

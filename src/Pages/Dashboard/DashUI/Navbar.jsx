@@ -36,7 +36,7 @@ export default function Navbar({ setSidebarOpen }) {
   return (
     <motion.div
       {...slideDown(0)}
-      className="fixed top-0 left-0 right-0 lg:left-[280px] h-28 py-5 flex items-center justify-between res-pad z-20 bg-zinc-100 border-b border-gray-200"
+      className="fixed top-0 left-0 right-0 lg:left-[280px] h-24 flex items-center justify-between p-4 z-20 bg-zinc-100 border-b border-gray-200"
     >
       <div>
         {/* Breadcrumb */}
@@ -52,7 +52,7 @@ export default function Navbar({ setSidebarOpen }) {
               {routeName}
             </li>
           </ol>
-          <h1 className="active-route text-2xl md:text-3xl font-semibold lexend tracking-wide capitalize">
+          <h1 className="active-route text-2xl md:text-3xl font-semibold lexend capitalize">
             {routeName}
           </h1>
         </div>

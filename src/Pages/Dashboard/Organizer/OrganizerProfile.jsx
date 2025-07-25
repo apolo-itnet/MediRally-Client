@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
+import ProfilePage from "../DashUI/ProfilePage";
 
 const OrganizerProfile = () => {
   return (
     <div>
-      <h1>Organizer Profile</h1>
+      <ProfilePage />
     </div>
   );
 };

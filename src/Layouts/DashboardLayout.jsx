@@ -15,7 +15,7 @@ const DashboardLayout = () => {
       <div className="flex-1 lg:ml-[280px] flex flex-col min-h-screen">
         <Navbar setSidebarOpen={setSidebarOpen} />
 
-        <main className="flex-1 w-full mt-28 p-6">
+        <main className="flex-1 w-full mt-28 p-4">
           <Outlet />
         </main>
       </div>
