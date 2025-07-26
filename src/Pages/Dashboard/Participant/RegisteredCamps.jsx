@@ -145,7 +145,7 @@ const RegisteredCamps = () => {
     );
 
   return (
-    <div className="p-5 w-full mx-auto">
+    <div className="p-5 w-full mx-auto lexend text-xs">
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
         <div className="flex items-center border border-zinc-300 hover:border-rose-500 transition-colors duration-300 ease-in-out rounded px-3 py-1 ">
@@ -176,7 +176,7 @@ const RegisteredCamps = () => {
 
       {/* Table */}
       <div className="overflow-x-auto rounded shadow">
-        <table className="table-auto w-full text-sm text-left bg-white">
+        <table className="table-auto w-full  text-left bg-white">
           <thead className="bg-gray-200 text-gray-700">
             <tr>
               <th className="px-4 py-2">SL</th>
@@ -207,7 +207,7 @@ const RegisteredCamps = () => {
                 </td>
                 <td className="px-4 py-2">{camp.confirmationStatus}</td>
 
-                <td className="px-4 py-2 text-sm">
+                <td className="px-4 py-2 ">
                   {camp.paymentStatus === "Pay" ? (
                     <SecondaryBtn
                       label="Pay"
@@ -236,7 +236,7 @@ const RegisteredCamps = () => {
                     <label
                       htmlFor="feedback_modal"
                       onClick={() => handleFeedback(camp)}
-                      className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white  font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Feedback
                     </label>
@@ -246,7 +246,7 @@ const RegisteredCamps = () => {
                   {/* <label
                     htmlFor="feedback_modal"
                     onClick={() => handleFeedback(camp)}
-                    className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white  font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Feedback
                   </label> */}
@@ -273,7 +273,7 @@ const RegisteredCamps = () => {
           onClick={handlePrev}
           disabled={currentPage === 1}
         />
-        <span className="text-sm">
+        <span className="">
           Page {currentPage} of {totalPages}
         </span>
         <SecondaryBtn

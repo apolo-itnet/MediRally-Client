@@ -2,13 +2,13 @@ import { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
-// import formatDate from "../../utils/formatDate";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
 import Loader from "../../../Shared/Loader/Loader";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
-import { toastSuccess } from "../../../Utility/toastmsg";
 import Swal from "sweetalert2";
+import { TbCoinTaka } from "react-icons/tb";
+
 
 const ManageRegisteredCamps = () => {
   const axiosSecure = useAxiosSecure();
@@ -175,14 +175,19 @@ const ManageRegisteredCamps = () => {
           </thead>
           <tbody>
             {paginatedCamps.map((reg, idx) => (
-              <tr key={reg._id}>
+              <tr key={reg._id} className="border-t">
                 <td className="px-4 py-2">
                   {(currentPage - 1) * itemsPerPage + idx + 1}
                 </td>
                 <td className="px-4 py-2">{reg.participant?.name}</td>
                 <td className="px-4 py-2">{reg.participant?.email}</td>
                 <td className="px-4 py-2">{reg.campName}</td>
-                <td className="px-4 py-2">{reg.campFees}৳</td>
+                <td className="px-4 py-2 flex gap-1 items-center">
+                  <span className="font-semibold text-2xl text-rose-500">
+                    <TbCoinTaka />
+                  </span>{" "}
+                  {reg.campFees}৳
+                </td>
                 <td className="px-4 py-2">{reg.paymentStatus}</td>
                 <td className="px-4 py-2">
                   {reg.confirmationStatus === "Pending" ? (
