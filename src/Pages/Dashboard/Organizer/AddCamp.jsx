@@ -172,7 +172,7 @@ const AddCamp = () => {
           )}
         </div>
 
-          {/* Healthcare Professional */}
+        {/* Healthcare Professional */}
         <div>
           <label className="label">
             Healthcare Professional <span className="text-red-500">*</span>
@@ -191,7 +191,7 @@ const AddCamp = () => {
           )}
         </div>
 
-          {/* Healthcare Speciality */}
+        {/* Healthcare Speciality */}
         <div>
           <label className="label">
             Healthcare Speciality <span className="text-red-500">*</span>
@@ -229,8 +229,6 @@ const AddCamp = () => {
             <p className="text-red-500 text-sm">Camp fee is required</p>
           )}
         </div>
-
-      
 
         {/* Location */}
         <div>
@@ -371,9 +369,8 @@ const AddCamp = () => {
           <SecondaryBtn
             type="submit"
             label={loading ? "Creating..." : "Add Camp"}
-            // label="Add Camp"
             icon={Plus}
-            // loading={true}
+            loading={loading}
             iconClassName="group-hover:rotate-0"
             className="flex justify-center items-center py-2"
           />

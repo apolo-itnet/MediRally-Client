@@ -21,14 +21,16 @@ import { fadeIn } from "../../../Utility/animation";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 import { TbCoinTaka } from "react-icons/tb";
 import { RxUpdate } from "react-icons/rx";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const UpdateCamps = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
   const [selectedDate, setSelectedDate] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
-  const [camps, setCamps] = useState([]);
-
+  const [originalData, setOriginalData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -40,21 +42,22 @@ const UpdateCamps = () => {
   // Fetch data
   useEffect(() => {
     axiosSecure.get(`/update-camp/${id}`).then((res) => {
-      const data = res.data;
-      if (data) {
-        setValue("campName", data.campName);
-        setValue("doctorName", data.doctorName);
-        setValue("doctorSpeciality", data.doctorSpeciality);
-        setValue("fees", data.fees);
-        setValue("venue", data.venue);
-        setValue("duration", data.duration);
-        setValue("maxParticipants", data.maxParticipants);
-        setValue("description", data.description);
-        setSelectedDate(new Date(data.eventDateTime));
+      const camp = res.data.data;
+      if (camp) {
+        setValue("campName", camp.campName);
+        setValue("doctorName", camp.doctorName);
+        setValue("doctorSpeciality", camp.doctorSpeciality);
+        setValue("fees", camp.fees);
+        setValue("venue", camp.venue);
+        setValue("duration", camp.duration);
+        setValue("maxParticipants", camp.maxParticipants);
+        setValue("description", camp.description);
+        setSelectedDate(new Date(camp.eventDateTime));
         setImagePreviews(
-          data.images.map((img) => ({
+          (camp.images || []).map((img) => ({
             preview: img.url,
             category: img.category,
+            deleteUrl: img.deleteUrl || "",
           }))
         );
       }
@@ -76,6 +79,7 @@ const UpdateCamps = () => {
   };
 
   const handleUpdate = async (data) => {
+    setLoading(true);
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You are about to update this camp!",
@@ -86,33 +90,75 @@ const UpdateCamps = () => {
       confirmButtonText: "Yes, update it!",
     });
 
-    if (result.isConfirmed) {
-      try {
-        const updated = {
-          ...data,
-          eventDateTime: selectedDate,
-          images: imagePreviews.map(({ preview, category }) => ({
-            url: preview,
-            category,
-          })),
-        };
+    if (!result.isConfirmed) return;
 
-        await axiosSecure.put(`/update-camp/${id}`, updated);
+    try {
+      const uploadedImages = [];
 
+      for (const item of imagePreviews) {
+        if (!item.file || item.preview.startsWith("http")) {
+          uploadedImages.push({
+            url: item.preview,
+            category: item.category,
+            ...(item.deleteUrl && { deleteUrl: item.deleteUrl }),
+          });
+          continue;
+        }
+
+        const formData = new FormData();
+        formData.append("image", item.file);
+
+        const res = await axiosPublic.post(
+          `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_img_key}`,
+          formData
+        );
+
+        if (res.data.success) {
+          uploadedImages.push({
+            url: res.data.data.url,
+            deleteUrl: res.data.data.delete_url,
+            category: item.category,
+          });
+        }
+      }
+
+      const updatedCamp = {
+        ...data,
+        eventDateTime: selectedDate,
+        images: uploadedImages,
+      };
+
+      const response = await axiosSecure.put(`/update-camp/${id}`, updatedCamp);
+
+      if (response.data.message === "No changes detected.") {
+        Swal.fire({
+          icon: "info",
+          title: "No Changes Detected!",
+          text: "Everything is already up to date.",
+        });
+      } else if (response.data.message === "Camp updated successfully.") {
         Swal.fire({
           icon: "success",
           title: "Camp Updated Successfully!",
           showConfirmButton: false,
           timer: 1500,
         });
-      } catch (error) {
-        console.error(error);
+      } else {
         Swal.fire({
           icon: "error",
           title: "Update Failed!",
-          text: "Something went wrong while updating.",
+          text: "Something went wrong.",
         });
       }
+    } catch (error) {
+      console.error("Update Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Update Failed!",
+        text: "Something went wrong while updating.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -315,8 +361,9 @@ const UpdateCamps = () => {
         <div className="col-span-1 md:col-span-2 lg:col-span-3 flex justify-center items-center py-2">
           <SecondaryBtn
             type="submit"
-            label="Update Camp"
+            label={loading ? "Updating..." : "Update Camp"}
             icon={RxUpdate}
+            loading={loading}
             iconClassName="group-hover:rotate-0"
             className="flex justify-center items-center py-2"
           />

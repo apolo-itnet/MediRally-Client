@@ -31,6 +31,7 @@ const ProfilePage = () => {
   const [photoFile, setPhotoFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -102,6 +103,8 @@ const ProfilePage = () => {
           setUploading(false);
           console.error(err);
           Swal.fire("Error", "Update failed", "error");
+        } finally {
+          setLoading(false);
         }
       }
     });
@@ -252,7 +255,7 @@ const ProfilePage = () => {
                           <option value="Other">Other</option>
                         </select>
                       </div>
-                      {errors.name && (
+                      {errors.gender && (
                         <p className="text-red-500 text-sm">
                           This field is required
                         </p>
@@ -270,7 +273,7 @@ const ProfilePage = () => {
                           className="input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300  rounded-full"
                         />
                       </div>
-                      {errors.name && (
+                      {errors.birthDate && (
                         <p className="text-red-500 text-sm">
                           This field is required
                         </p>
@@ -289,7 +292,7 @@ const ProfilePage = () => {
                           placeholder="01812345678"
                         />
                       </div>
-                      {errors.name && (
+                      {errors.phone && (
                         <p className="text-red-500 text-sm">
                           This field is required
                         </p>
@@ -314,7 +317,7 @@ const ProfilePage = () => {
                           placeholder="e.g. Gec Circle, Panchlaish "
                         />
                       </div>
-                      {errors.name && (
+                      {errors.location && (
                         <p className="text-red-500 text-sm">
                           This field is required
                         </p>
@@ -333,7 +336,7 @@ const ProfilePage = () => {
                           placeholder="City"
                         />
                       </div>
-                      {errors.name && (
+                      {errors.city && (
                         <p className="text-red-500 text-sm">
                           This field is required
                         </p>
@@ -352,7 +355,7 @@ const ProfilePage = () => {
                           placeholder="Zip Code"
                         />
                       </div>
-                      {errors.name && (
+                      {errors.zip && (
                         <p className="text-red-500 text-sm">
                           This field is required
                         </p>
@@ -371,7 +374,7 @@ const ProfilePage = () => {
                           placeholder="Country"
                         />
                       </div>
-                      {errors.name && (
+                      {errors.country && (
                         <p className="text-red-500 text-sm">
                           This field is required
                         </p>
@@ -438,9 +441,10 @@ const ProfilePage = () => {
                 <div className="flex justify-center items-center">
                   <SecondaryBtn
                     type="submit"
-                    label="Update Profile"
+                    label={loading ? "Updating..." : "Update Profile"}
                     icon={RxUpdate}
-                  ></SecondaryBtn>
+                    loading={loading}
+                  />
                 </div>
               </motion.div>
             </form>
