@@ -29,16 +29,31 @@ const ManageRegisteredCamps = () => {
     },
   });
 
-  // ✅ Get all paid camps
-  const { data: paidCampIds = [] } = useQuery({
-    queryKey: ["paidCamps", user?.email],
-
+  // Instead of paymentRecords, it's actually paymentRecords
+  const { data: paymentRecords = [] } = useQuery({
+    queryKey: ["organizerPaidCamps", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/is-paid/all/${user.email}`);
+      const res = await axiosSecure.get(
+        `/organizer/paid-camps/${user.email}`
+      );
       return res.data;
     },
   });
+
+  console.log("paymentRecords:", paymentRecords);
+
+  const isPaid = (registrationId) => {
+    return paymentRecords.some(
+      (p) => p.camp === registrationId && p.paymentStatus === "Pay"
+    );
+  };
+
+  const isConfirmed = (registrationId) => {
+    return paymentRecords.some(
+      (p) => p.camp === registrationId && p.confirmationStatus === "Confirmed"
+    );
+  };
 
   // ✅ Search + Filter
   const filteredCamps = useMemo(() => {
@@ -173,14 +188,13 @@ const ManageRegisteredCamps = () => {
           <thead className="bg-gray-200 text-gray-700">
             <tr>
               <th className="px-4 py-2">SL</th>
-              <th className="px-4 py-2">Participant Name</th>
-              <th className="px-4 py-2">Email</th>
               <th className="px-4 py-2">Camp Name</th>
-              <th className="px-4 py-2">Fees</th>
-              <th className="px-4 py-2">Payment</th>
+              <th className="px-4 py-2">Camp Fees</th>
+              <th className="px-4 py-2">Participant Name</th>
+              <th className="px-4 py-2">Participant Email</th>
+              <th className="px-4 py-2">Payment Status</th>
               <th className="px-4 py-2">Confirm</th>
               <th className="px-4 py-2">Joined</th>
-              <th className="px-4 py-2">Cancel</th>
             </tr>
           </thead>
           <tbody>
@@ -189,8 +203,6 @@ const ManageRegisteredCamps = () => {
                 <td className="px-4 py-2">
                   {(currentPage - 1) * itemsPerPage + idx + 1}
                 </td>
-                <td className="px-4 py-2">{reg.participant?.name}</td>
-                <td className="px-4 py-2">{reg.participant?.email}</td>
                 <td className="px-4 py-2">{reg.campName}</td>
                 <td className="px-4 py-2 flex gap-1 items-center">
                   <span className="font-semibold text-2xl text-rose-500">
@@ -198,27 +210,45 @@ const ManageRegisteredCamps = () => {
                   </span>{" "}
                   {reg.campFees}৳
                 </td>
-                <td className="px-4 py-2">{paidCampIds.includes(reg._id) ? "Paid" : "Unpaid"}</td>
+                <td className="px-4 py-2">{reg.participant?.name}</td>
+                <td className="px-4 py-2">{reg.participant?.email}</td>
                 <td className="px-4 py-2">
-                  {reg.confirmationStatus === "Pending" ? (
-                    <SecondaryBtn
-                      label="Confirm"
-                      type="button"
-                      showIcon={false}
-                      onClick={() => handleConfirm(reg._id)}
-                    ></SecondaryBtn>
+                  {isPaid(reg._id) ? (
+                    <span className="text-green-600 font-semibold">Paid</span>
                   ) : (
-                    "Confirmed"
+                    <span className="text-red-500 font-semibold">Unpaid</span>
                   )}
                 </td>
-                {/* <td className="px-4 py-2">{formatDate(reg.joinedAt)}</td> */}
+
+                <td className="px-4 py-2">
+                  {isPaid(reg._id) ? (
+                    isConfirmed(reg._id) ? (
+                      <span className="text-green-600 font-semibold">
+                        Confirmed
+                      </span>
+                    ) : (
+                      <SecondaryBtn
+                        label="Pending"
+                        type="button"
+                        showIcon={false}
+                        onClick={() => handleConfirm(reg._id)}
+                      />
+                    )
+                  ) : (
+                    <span className="text-gray-500 italic">
+                      Awaiting Payment
+                    </span>
+                  )}
+                </td>
+
                 <td className="px-4 py-2">
                   <SecondaryBtn
                     label="Cancel"
                     type="button"
                     showIcon={false}
                     onClick={() => handleCancel(reg._id)}
-                  ></SecondaryBtn>
+                    disabled={isPaid(reg._id) && isConfirmed(reg._id)}
+                  />
                 </td>
               </tr>
             ))}
