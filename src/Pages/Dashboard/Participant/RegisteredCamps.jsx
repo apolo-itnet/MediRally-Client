@@ -8,6 +8,7 @@ import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 import { TbCoinTaka } from "react-icons/tb";
 import FeedbackModal from "./FeedbackModal";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 const RegisteredCamps = () => {
   const axiosSecure = useAxiosSecure();
@@ -31,6 +32,17 @@ const RegisteredCamps = () => {
     enabled: !!user?.email,
   });
 
+  const { data: paidCampIds = [] } = useQuery({
+    queryKey: ["paidCamps", user?.email],
+
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/is-paid/all/${user.email}`);
+      return res.data;
+    },
+  });
+  console.log("paidCampIds:", paidCampIds);
+
   // Search + Filter Logic
   const filteredCamps = useMemo(() => {
     if (!Array.isArray(camps)) return [];
@@ -41,9 +53,7 @@ const RegisteredCamps = () => {
       filtered = filtered.filter(
         (camp) =>
           camp?.campName?.toLowerCase().includes(searchText.toLowerCase()) ||
-          camp?.healthcareProfessional
-            ?.toLowerCase()
-            .includes(searchText.toLowerCase())
+          camp?.doctorName?.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
@@ -67,22 +77,6 @@ const RegisteredCamps = () => {
 
   const handlePrev = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
-  // Placeholder functions
-  const handlePay = async (camp) => {
-    try {
-      const res = await axiosSecure.post("/create-payment-intent", {
-        campId: camp._id,
-        amount: camp.campFees,
-        userEmail: user.email,
-      });
-
-      // Redirect to Stripe checkout
-      window.location.href = res.data.url;
-    } catch (error) {
-      toast.error("Payment failed");
-    }
   };
 
   const handleCancel = async (id) => {
@@ -207,49 +201,51 @@ const RegisteredCamps = () => {
                 </td>
                 <td className="px-4 py-2">{camp.confirmationStatus}</td>
 
-                <td className="px-4 py-2 ">
-                  {camp.paymentStatus === "Pay" ? (
+                <td className="px-4 py-2">
+                  {paidCampIds.includes(camp.campId) ? (
                     <SecondaryBtn
-                      label="Pay"
-                      text="Pay"
-                      onClick={() => handlePay(camp)}
+                      label="Paid"
                       showIcon={false}
                       className="px-8 py-1"
+                      disabled={paidCampIds.includes(camp.campId)}
                     />
                   ) : (
-                    <span className="text-green-600 font-semibold">Paid</span>
+                    <Link
+                      to="/dashboard/participant/payment"
+                      state={{ camp }}
+                      className="text-rose-600 font-semibold"
+                    >
+                      <SecondaryBtn
+                        label="Pay"
+                        showIcon={false}
+                        className="px-8 py-1"
+                      />
+                    </Link>
                   )}
                 </td>
+
                 <td className="">
                   <SecondaryBtn
                     label="Cancel"
                     type="button"
-                    text="Cancel"
                     showIcon={false}
-                    disabled={camp.paymentStatus === "Paid"}
+                    disabled={paidCampIds.includes(camp.campId)}
                     onClick={() => handleCancel(camp._id)}
                     className="px-6 py-1"
                   />
                 </td>
                 <td className="px-4 py-2">
-                  {camp.paymentStatus === "Paid" ? (
+                  {paidCampIds.includes(camp.campId) ? (
                     <label
                       htmlFor="feedback_modal"
                       onClick={() => handleFeedback(camp)}
-                      className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white  font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white font-medium px-4 py-2 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Feedback
                     </label>
                   ) : (
                     <span className="text-gray-400">N/A</span>
                   )}
-                  {/* <label
-                    htmlFor="feedback_modal"
-                    onClick={() => handleFeedback(camp)}
-                    className="cursor-pointer group relative bg-pink-700 hover:bg-pink-800 text-white  font-medium px-4 py-1 rounded-full transition-all duration-200 ease-in-out shadow hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Feedback
-                  </label> */}
                 </td>
               </tr>
             ))}

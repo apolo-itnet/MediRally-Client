@@ -1,100 +1,53 @@
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
-import axios from "axios";
+import React from "react";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import PaymentForm from "./PaymentForm";
+import { useLocation } from "react-router";
+import { TbCoinTaka } from "react-icons/tb";
+import { slideUp } from "../../../Utility/animation";
+import { motion } from "framer-motion";
 
-const Payment = ({ price }) => {
-  const stripe = useStripe();
-  const elements = useElements();
+export const stripePromise = loadStripe(import.meta.env.VITE_payment_Key);
 
-  const [clientSecret, setClientSecret] = useState("");
-  const [processing, setProcessing] = useState(false);
-  const [transactionId, setTransactionId] = useState("");
+const Payment = () => {
+  const location = useLocation();
+  const camp = location.state?.camp;
 
-  // 1. useEffect diye backend theke clientSecret anar logic
-  useEffect(() => {
-    if (price > 0) {
-      axios
-        .post("http://localhost:5000/api/payments/create-payment-intent", { price })
-        .then((res) => {
-          setClientSecret(res.data.clientSecret);
-        });
-    }
-  }, [price]);
-
-  // 2. Payment submit handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
-
-    const card = elements.getElement(CardElement);
-    if (!card) return;
-
-    setProcessing(true);
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card,
-    });
-
-    if (error) {
-      console.log("[error]", error);
-      setProcessing(false);
-      return;
-    }
-
-    const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
-      clientSecret,
-      {
-        payment_method: paymentMethod.id,
-      }
+  if (!camp) {
+    return (
+      <div>
+        <h1 className="text-center lexend font-bold">
+          No camp selected for payment
+        </h1>
+      </div>
     );
-
-    if (confirmError) {
-      console.log("confirm error", confirmError);
-      setProcessing(false);
-      return;
-    }
-
-    if (paymentIntent.status === "succeeded") {
-      setTransactionId(paymentIntent.id);
-      console.log("Payment successful, Transaction ID:", paymentIntent.id);
-
-      // Optional: Save to MongoDB or show success UI
-    }
-
-    setProcessing(false);
-  };
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md p-4 space-y-4 border rounded-lg">
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: "16px",
-              color: "#424770",
-              "::placeholder": {
-                color: "#aab7c4",
-              },
-            },
-            invalid: {
-              color: "#9e2146",
-            },
-          },
-        }}
-      />
-      <button
-        type="submit"
-        disabled={!stripe || !clientSecret || processing}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+    <Elements stripe={stripePromise}>
+      <motion.div
+        {...slideUp(0.5)}
+        className="max-w-lg mx-auto bg-white rounded-lg shadow p-4 my-4 lexend"
       >
-        {processing ? "Processing..." : "Pay"}
-      </button>
-
-      {transactionId && (
-        <p className="text-green-600">Transaction complete! ID: {transactionId}</p>
-      )}
-    </form>
+        <h2 className="text-xl font-bold mb-4">Pay for: {camp.campName}</h2>
+        <p className="flex items-center gap-2">
+          Fees:{" "}
+          <span className="font-semibold text-2xl text-rose-500">
+            <TbCoinTaka />
+          </span>{" "}
+          {camp.campFees}
+        </p>
+      </motion.div>
+      <PaymentForm
+        camp={camp._id}
+        campId={camp.campId}
+        campName={camp.campName}
+        price={camp.campFees}
+        paymentStatus={camp.paymentStatus}
+        confirmationStatus={camp.confirmationStatus}
+        participantEmail={camp.participant.email}
+      />
+    </Elements>
   );
 };
 

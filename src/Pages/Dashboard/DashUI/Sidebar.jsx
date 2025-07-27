@@ -47,7 +47,7 @@ export default function Sidebar({ isOpen, onClose }) {
       icon: <BarChart2 />,
     },
     {
-      label: "Payment",
+      label: "Payment History",
       href: "/dashboard/participant/payment-history",
       icon: <CreditCard />,
     },

@@ -33,6 +33,7 @@ import AboutUs from "../Pages/AboutUs";
 import ContactUs from "../Pages/ContactUs";
 import Feedback from "../Pages/Dashboard/Participant/Feedback";
 import UpdateCamps from "../Pages/Dashboard/Organizer/UpdateCamps";
+import PaymentHistory from "../Pages/Dashboard/Participant/PaymentHistory";
 
 
 
@@ -160,10 +161,18 @@ const Router = createBrowserRouter([
             ),
           },
           {
-            path: "payment-history",
+            path: "payment",
             element: (
               <RoleRoutes role="Participant">
                 <Payment />
+              </RoleRoutes>
+            ),
+          },
+          {
+            path: "payment-history",
+            element: (
+              <RoleRoutes role="Participant">
+                <PaymentHistory />
               </RoleRoutes>
             ),
           },

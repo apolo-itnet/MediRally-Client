@@ -9,7 +9,6 @@ import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 import Swal from "sweetalert2";
 import { TbCoinTaka } from "react-icons/tb";
 
-
 const ManageRegisteredCamps = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
@@ -26,6 +25,17 @@ const ManageRegisteredCamps = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosSecure.get(`/registered-users/${user.email}`);
+      return res.data;
+    },
+  });
+
+  // ✅ Get all paid camps
+  const { data: paidCampIds = [] } = useQuery({
+    queryKey: ["paidCamps", user?.email],
+
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/is-paid/all/${user.email}`);
       return res.data;
     },
   });
@@ -188,7 +198,7 @@ const ManageRegisteredCamps = () => {
                   </span>{" "}
                   {reg.campFees}৳
                 </td>
-                <td className="px-4 py-2">{reg.paymentStatus}</td>
+                <td className="px-4 py-2">{paidCampIds.includes(reg._id) ? "Paid" : "Unpaid"}</td>
                 <td className="px-4 py-2">
                   {reg.confirmationStatus === "Pending" ? (
                     <SecondaryBtn
