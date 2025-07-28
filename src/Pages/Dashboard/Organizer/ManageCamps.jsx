@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Edit, ListPlus, Trash2 } from "lucide-react";
+import { Edit, EyeIcon, ListPlus, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
@@ -47,7 +47,7 @@ const ManageCamps = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 lexend">
+    <div className="container mx-auto px-4 py-8 lexend text-xs">
       <h2 className="text-3xl font-bold text-center mb-8 text-rose-500">
         Manage Your Camps
       </h2>
@@ -85,28 +85,47 @@ const ManageCamps = () => {
                   </td>
                   <td className="py-4 px-4">{camp.venue}</td>
                   <td className="py-4 px-4">{camp.doctorName}</td>
-                  <td className="py-4 px-4 text-right">
-                    <div className="flex justify-end space-x-2">
+                  <td className="flex justify-center items-center gap-2 w-full">
+                    <div className="flex justify-center items-center gap-2">
                       <Link to={`/dashboard/organizer/update-camp/${camp._id}`}>
-                        <SecondaryBtn
-                          label="Edit"
-                          icon={Edit}
-                          iconPosition="left"
-                          iconProps={{ size: 15 }}
-                          className="Px-4 py-1 text-xs font-light"
-                          iconClassName="group-hover:rotate-0"
-                        />
+                        <button
+                          // label=""
+                          // icon={Edit}
+                          // iconPosition="left"
+                          // iconProps={{ size: 15 }}
+                          // iconClassName="group-hover:rotate-0"
+                          className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer"
+                        >
+                          {" "}
+                          <Edit size={16} />{" "}
+                        </button>
                       </Link>
-                      <SecondaryBtn
-                        label="Delete"
-                        icon={Trash2}
-                        iconPosition="left"
-                        iconProps={{ size: 15 }}
+                      <button
+                        // label=""
+                        // icon={Trash2}
+                        // iconPosition="left"
+                        // iconProps={{ size: 15 }}
+                        // iconClassName="group-hover:rotate-0"
                         onClick={() => handleDelete(camp._id)}
-                        className="Px-4 py-1 text-xs font-light"
-                        iconClassName="group-hover:rotate-0"
-                      />
+                        className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer"
+                      >
+                        {" "}
+                        <Trash2 size={16} />{" "}
+                      </button>
                     </div>
+                    <Link to={`/available-camps/${camp._id}`}>
+                      <button
+                        // label=""
+                        // icon={EyeIcon}
+                        // iconPosition="left"
+                        // iconProps={{ size: 15 }}
+                        // iconClassName="group-hover:rotate-0"
+                        className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer"
+                      >
+                        {" "}
+                        <EyeIcon size={16} />{" "}
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               ))}

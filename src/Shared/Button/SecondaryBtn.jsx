@@ -2,7 +2,7 @@ import React from "react";
 import { ArrowRight } from "lucide-react";
 
 const SecondaryBtn = ({
-  label = "Your Text",
+  label = "",
   icon: IconComponent = ArrowRight,
   iconProps = { size: 16 },
   iconBg = "bg-pink-700",
