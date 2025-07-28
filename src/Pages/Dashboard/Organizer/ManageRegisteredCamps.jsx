@@ -39,8 +39,6 @@ const ManageRegisteredCamps = () => {
     },
   });
 
-  console.log("paymentRecords:", paymentRecords);
-
   const isPaid = (registrationId) => {
     return paymentRecords.some(
       (p) => p.camp === registrationId && p.paymentStatus === "Pay"

@@ -41,7 +41,6 @@ const RegisteredCamps = () => {
       return res.data;
     },
   });
-  console.log("paidCampIds:", paidCampIds);
 
   // Search + Filter Logic
   const filteredCamps = useMemo(() => {

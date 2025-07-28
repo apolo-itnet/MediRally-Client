@@ -71,6 +71,7 @@ const AddCamp = () => {
       duration,
       description,
       participantCount,
+      organizerEmail,
     } = e;
 
     if (imagePreviews.length === 0 || imagePreviews.length > 4) {
@@ -120,6 +121,7 @@ const AddCamp = () => {
           email: user?.email,
           photo: user?.photoURL,
         },
+        organizerEmail,
         createdAt: new Date().toISOString(),
       };
 

@@ -1,17 +1,21 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../../../Shared/Loader/Loader";
 import { FaSearch } from "react-icons/fa";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const PaymentHistory = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
 
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [confirmationMap, setConfirmationMap] = useState({});
+
   const itemsPerPage = 10;
 
   const { data: payments = [], isLoading } = useQuery({
@@ -22,6 +26,32 @@ const PaymentHistory = () => {
     },
     enabled: !!user?.email,
   });
+
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      const newMap = {};
+      for (const p of payments) {
+        try {
+          const res = await axiosSecure.get(
+            `/register/confirmation-status/${user.email}/${p.campId}`
+          );
+
+          newMap[p.campId] = res.data.confirmationStatus;
+        } catch {
+          newMap[p.campId] = "Pending";
+        }
+      }
+      setConfirmationMap(newMap);
+    };
+
+    if (payments.length > 0) fetchStatuses();
+  }, [payments, user.email, axiosSecure]);
+
+  const statusMap = {
+    Pay: "Paid",
+    Unpaid: "Unpaid",
+    Pending: "Pending",
+  };
 
   // Filter & Search Logic
   const filteredPayments = useMemo(() => {
@@ -97,12 +127,21 @@ const PaymentHistory = () => {
                 <td className="px-4 py-2">{idx + 1}</td>
                 <td className="px-4 py-2">{payment.campName}</td>
                 <td className="px-4 py-2">{payment.transactionId}</td>
-                <td className="px-4 py-2 text-green-600 font-semibold">
-                  {payment.paymentStatus}
+                <td className="px-4 py-2">
+                  {statusMap[payment.paymentStatus] || payment.paymentStatus}
                 </td>
                 <td className="px-4 py-2">
-                  {payment.confirmationStatus || "Pending"}
+                  <span
+                    className={
+                      confirmationMap[payment.campId] === "Confirmed"
+                        ? "text-green-600 font-semibold"
+                        : "text-red-600 font-semibold"
+                    }
+                  >
+                    {confirmationMap[payment.campId] || "Pending"}
+                  </span>
                 </td>
+
                 <td className="px-4 py-2">
                   {new Date(payment.date).toLocaleDateString()}
                 </td>
