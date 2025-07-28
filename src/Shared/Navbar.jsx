@@ -28,14 +28,13 @@ const Navbar = () => {
   const axiosSecure = useAxiosSecure();
 
   const { data: userInfo = {}, refetch } = useQuery({
-      queryKey: ["userProfile", user?.email],
-      enabled: !!user?.email,
-      queryFn: async () => {
-        const res = await axiosSecure.get(`/users/${user.email}`);
-        return res.data;
-      },
-    });
-  
+    queryKey: ["userProfile", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${user.email}`);
+      return res.data;
+    },
+  });
 
   const handleSignout = async () => {
     setIsDropdownOpen(false);
@@ -115,7 +114,7 @@ const Navbar = () => {
                 {/* Nav Links */}
                 <ul className="text-xs font-medium flex flex-col items-start gap-2 py-4 border-t border-zinc-200 w-full">
                   {navLinks.map((link, index) => (
-                    <li  key={index}>
+                    <li key={index}>
                       <NavLink
                         to={link.href}
                         className="flex justify-start items-center gap-2 px-2 py-2 group"
@@ -163,18 +162,18 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Logo */}
-           {!user && (
+            {!user && (
               <Link to="/" className="flex lg:hidden items-center gap-2">
-              <img
-                src="https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"
-                alt="logo"
-                className="w-8 h-8"
-              />
-              <h1 className="text-xl font-bold zain text-pink-700">
-                Medi <span className="text-green-500">Rally</span>
-              </h1>
-            </Link>
-           )}
+                <img
+                  src="https://i.postimg.cc/QMJ1T5CC/stethoscope-logo-1.png"
+                  alt="logo"
+                  className="w-8 h-8"
+                />
+                <h1 className="text-xl font-bold zain text-pink-700">
+                  Medi <span className="text-green-500">Rally</span>
+                </h1>
+              </Link>
+            )}
           </div>
 
           {/* Desktop Center Menu */}
@@ -186,8 +185,11 @@ const Navbar = () => {
                 alt="logo"
                 className="w-8 h-8"
               />
-              <h1 className="text-3xl font-bold zain text-pink-700 px-2">
-                Medi <span className="text-green-500">Rally</span>
+             
+              <h1 className="zain opacity-80 flex gap-4">
+                <span className="text-4xl font-black text-rose-500">
+                  Medi Rally
+                </span>
               </h1>
             </Link>
 
@@ -275,7 +277,7 @@ const Navbar = () => {
                       </NavLink>
                     </li>
                   ))}
-                     <SecondaryBtn
+                  <SecondaryBtn
                     label="Sign Out"
                     icon={LogOut}
                     onClick={handleSignout}

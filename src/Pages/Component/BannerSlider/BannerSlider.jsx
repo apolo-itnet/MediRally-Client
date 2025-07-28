@@ -92,7 +92,7 @@ const BannerSlider = () => {
                         icon={ArrowRight}
                         iconProps={{ size: 18 }}
                         type="button"
-                        className="w-fit py-2  justify-center items-center inline-flex"
+                        className="justify-center items-center inline-flex"
                       ></SecondaryBtn>
                     </motion.div>
                   )}

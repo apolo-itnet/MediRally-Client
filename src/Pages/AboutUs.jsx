@@ -1,18 +1,17 @@
-// AboutUs.jsx
 import { motion } from "framer-motion";
 import { fadeUp, slideDown } from "../Utility/animation";
 
 const AboutUs = () => {
   return (
-    <div className="min-h-screen bg-base-100 px-4 py-16 flex flex-col items-center justify-center">
+    <div className="relative h-[calc(100vh-80px)] bg-base-100 px-4 py-16 flex flex-col items-center justify-start lexend ">
       <motion.h1
         {...slideDown(0)}
-        className="text-4xl md:text-5xl font-bold text-center text-primary mb-10"
+        className="text-4xl md:text-5xl font-bold text-center text-rose-500 mb-10"
       >
         About Medi Rally
       </motion.h1>
 
-      <div className="max-w-3xl space-y-6 text-lg text-center text-base-content">
+      <div className="max-w-3xl space-y-6 text-center text-base-content font-light">
         <motion.p {...fadeUp(0.1)}>
           Medi Rally is a revolutionary platform that brings together medical professionals, students, and volunteers for organized health campaigns. It aims to streamline collaboration and maximize impact in community healthcare services.
         </motion.p>

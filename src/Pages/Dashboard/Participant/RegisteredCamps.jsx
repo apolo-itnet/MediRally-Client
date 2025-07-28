@@ -9,6 +9,8 @@ import { TbCoinTaka } from "react-icons/tb";
 import FeedbackModal from "./FeedbackModal";
 import Swal from "sweetalert2";
 import { Link } from "react-router";
+import { motion } from "framer-motion";
+import { slideUp } from "../../../Utility/animation";
 
 const RegisteredCamps = () => {
   const axiosSecure = useAxiosSecure();
@@ -117,8 +119,6 @@ const RegisteredCamps = () => {
 
   const handleFeedback = (camp) => {
     setSelectedCamp(camp);
-
-    // Optional fallback if modal doesn't toggle
     const checkbox = document.getElementById("feedback_modal");
     if (checkbox) checkbox.checked = true;
   };
@@ -127,7 +127,6 @@ const RegisteredCamps = () => {
     const checkbox = document.getElementById("feedback_modal");
     if (checkbox) checkbox.checked = false;
     setSelectedCamp(null);
-    onClose();
   };
 
   if (isLoading)
@@ -138,7 +137,7 @@ const RegisteredCamps = () => {
     );
 
   return (
-    <div className="p-5 w-full mx-auto lexend text-xs">
+    <motion.div {...slideUp(0.1)} className="p-5 w-full mx-auto lexend text-xs">
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
         <div className="flex items-center border border-zinc-300 hover:border-rose-500 transition-colors duration-300 ease-in-out rounded px-3 py-1 ">
@@ -198,7 +197,15 @@ const RegisteredCamps = () => {
                   {" "}
                   {new Date(camp.joinedAt).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-2">{camp.confirmationStatus}</td>
+                <td
+                  className={`px-4 py-2 font-semibold ${
+                    camp.confirmationStatus === "Confirmed"
+                      ? "text-green-500"
+                      : "text-rose-500"
+                  }`}
+                >
+                  {camp.confirmationStatus}
+                </td>
 
                 <td className="px-4 py-2">
                   {paidCampIds.includes(camp.campId) ? (
@@ -279,7 +286,7 @@ const RegisteredCamps = () => {
           disabled={currentPage === totalPages}
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

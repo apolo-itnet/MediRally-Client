@@ -5,23 +5,19 @@ import {
   SiCodepen,
   SiFacebook,
   SiGithub,
-  SiInstagram,
   SiLinkedin as Linkedin,
-  SiX,
 } from "react-icons/si";
-import { FaSearch } from "react-icons/fa";
-import { HiOutlineUsers } from "react-icons/hi2";
-import { RiContactsBook3Line } from "react-icons/ri";
+import { FaSearch, FaUserFriends, FaAddressBook } from "react-icons/fa";
 import SecondaryBtn from "./Button/SecondaryBtn";
 import { motion } from "framer-motion";
-import { slideLeft, slideRight, slideUp } from "../Utility/animation";
+import { slideRight, slideUp } from "../Utility/animation";
 
 export const languages = ["En", "Es", "Fr", "De", "Ru"];
 
 export const footerLinks = [
-  { label: "Browse Posts", href: "/all-posts", icon: <FaSearch /> },
-  { label: "About Us", href: "/about", icon: <HiOutlineUsers /> },
-  { label: "Contact", href: "/contact", icon: <RiContactsBook3Line /> },
+  { label: "Available Camps", href: "/all-camps", icon: <FaSearch /> },
+  { label: "About Us", href: "/about", icon: <FaUserFriends /> },
+  { label: "Contact", href: "/contact", icon: <FaAddressBook /> },
 ];
 
 export const socials = [
@@ -42,10 +38,7 @@ const Footer = () => {
           >
             <h1 className="zain opacity-50 flex gap-4">
               <span className="text-7xl md:text-9xl xl:text-[14rem] leading-10 xl:leading-[10rem] tracking-tighter text-pink-700">
-                Medi
-              </span>
-              <span className="text-7xl md:text-9xl xl:text-[14rem] leading-10 xl:leading-[10rem] text-green-500 -ml-2">
-                Rally
+                Medi Rally
               </span>
             </h1>
           </motion.div>
@@ -64,8 +57,7 @@ const Footer = () => {
                   label="Contact US"
                   icon={ArrowRight}
                   iconProps={{ size: 18 }}
-                  className="w-fit py-2 flex items-center"
-                ></SecondaryBtn>
+                />
               </div>
 
               <div className="navMenu self-start md:self-end lg:justify-self-end">
@@ -74,16 +66,24 @@ const Footer = () => {
                     <li key={index}>
                       <NavLink
                         to={link.href}
-                        className={({ isActive }) =>
-                          `flex items-center gap-2 px-3 py-3 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-zinc-400 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] rounded-md transition-all ease-in-out duration-300 
-                            ${
-                              isActive
-                                ? "active"
-                                : "hover:after:origin-bottom-left hover:after:scale-x-100 after:origin-bottom-right after:scale-x-0"
-                            }`
-                        }
+                        className="flex justify-between items-center gap-2 px-2 group"
                       >
-                        {link.icon} {link.label}
+                        {({ isActive }) => (
+                          <>
+                            <span
+                              className={`text-lg ${
+                                isActive
+                                  ? "text-rose-500"
+                                  : "text-zinc-400 group-hover:text-rose-500"
+                              }`}
+                            >
+                              {link.icon}
+                            </span>
+                            <span className="text-sm font-medium">
+                              {link.label}
+                            </span>
+                          </>
+                        )}
                       </NavLink>
                     </li>
                   ))}
@@ -96,7 +96,7 @@ const Footer = () => {
                     <li key={index} className="cursor-pointer bg-transparent">
                       <a
                         href={item.href}
-                        className="transition-color h-full w-full text-sky-600 duration-300 hover:text-pink-700"
+                        className="transition-color ease-in-out text-pink-700 duration-300 hover:text-pink-800 text-lg"
                       >
                         {item.icon}
                       </a>
@@ -105,8 +105,8 @@ const Footer = () => {
                 </ul>
               </div>
             </div>
-            <hr className="border-gray-600" />
-            <p className="w-full text-center my-6 text-gray-600">
+            <hr className="border-zinc-400" />
+            <p className="w-full text-center my-6 text-zinc-800 lexend text-sm">
               Copyright © 2025 Medi Rally
             </p>
           </motion.div>

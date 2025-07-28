@@ -78,7 +78,6 @@ export default function Sidebar({ isOpen, onClose }) {
       document.body.style.overflow = "auto";
     };
   }, [isOpen]);
-  
 
   return (
     <div className="bg-white z-50">
@@ -108,8 +107,10 @@ export default function Sidebar({ isOpen, onClose }) {
                 alt="logo"
                 className="w-8 h-8"
               />
-              <h1 className="text-4xl font-bold lexend text-rose-500">
-                Medi <span className="">Rally</span>
+              <h1 className="zain opacity-80 flex gap-4">
+                <span className="text-4xl font-black text-rose-500">
+                  Medi Rally
+                </span>
               </h1>
             </div>
           </div>

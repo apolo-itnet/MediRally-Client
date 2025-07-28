@@ -8,6 +8,8 @@ import Loader from "../../../Shared/Loader/Loader";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
 import Swal from "sweetalert2";
 import { TbCoinTaka } from "react-icons/tb";
+import {motion} from "framer-motion"
+import { slideUp } from "../../../Utility/animation";
 
 const ManageRegisteredCamps = () => {
   const axiosSecure = useAxiosSecure();
@@ -41,7 +43,7 @@ const ManageRegisteredCamps = () => {
 
   const isPaid = (registrationId) => {
     return paymentRecords.some(
-      (p) => p.camp === registrationId && p.paymentStatus === "Pay"
+      (p) => p.camp === registrationId && p.paymentStatus === "Paid"
     );
   };
 
@@ -148,7 +150,7 @@ const ManageRegisteredCamps = () => {
     );
 
   return (
-    <div className="p-5 w-full mx-auto lexend text-xs">
+    <motion.div {...slideUp(0.1)} className="p-5 w-full mx-auto lexend text-xs">
       {/* Search & Filter */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
         <div className="flex items-center border border-zinc-300 hover:border-rose-500 transition-colors duration-300 ease-in-out rounded px-3 py-1">
@@ -279,7 +281,7 @@ const ManageRegisteredCamps = () => {
           />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

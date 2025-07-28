@@ -6,6 +6,8 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { Link } from "react-router";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import SecondaryBtn from "../../../Shared/Button/SecondaryBtn";
+import { slideUp } from "../../../Utility/animation";
+import { motion } from "framer-motion";
 
 const ManageCamps = () => {
   const { user } = useAuth();
@@ -60,10 +62,10 @@ const ManageCamps = () => {
           </Link>
         </div>
       ) : (
-        <div className="overflow-x-auto bg-white rounded-lg shadow">
-          <table className="table w-full">
+        <motion.div {...slideUp(0.1)}className="overflow-x-auto bg-white rounded-lg shadow">
+          <table  className="table w-full">
             {/* Table Head */}
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 text-gray-700">
               <tr>
                 <th className="py-3 px-4 text-left">Sl</th>
                 <th className="py-3 px-4 text-left">Camp Name</th>
@@ -75,63 +77,47 @@ const ManageCamps = () => {
             </thead>
 
             {/* Table Body */}
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 relative">
               {camps.map((camp) => (
-                <tr key={camp._id} className="hover:bg-gray-50">
+                <tr key={camp._id} className="hover:bg-gray-50 overflow-auto">
                   <td className="py-4 px-4">{camps.indexOf(camp) + 1}</td>
                   <td className="py-4 px-4 ">{camp.campName}</td>
                   <td className="py-4 px-4">
-                    {new Date(camp.eventDateTime).toLocaleString()}
+                    <div>
+                      <p>{new Date(camp.eventDateTime).toLocaleDateString()}</p>
+                      <p>{new Date(camp.eventDateTime).toLocaleTimeString()}</p>
+                    </div>
                   </td>
                   <td className="py-4 px-4">{camp.venue}</td>
                   <td className="py-4 px-4">{camp.doctorName}</td>
-                  <td className="flex justify-center items-center gap-2 w-full">
+                  <td className="py-4 px-4">
                     <div className="flex justify-center items-center gap-2">
                       <Link to={`/dashboard/organizer/update-camp/${camp._id}`}>
-                        <button
-                          // label=""
-                          // icon={Edit}
-                          // iconPosition="left"
-                          // iconProps={{ size: 15 }}
-                          // iconClassName="group-hover:rotate-0"
-                          className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer"
-                        >
+                        <button className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer">
                           {" "}
                           <Edit size={16} />{" "}
                         </button>
                       </Link>
                       <button
-                        // label=""
-                        // icon={Trash2}
-                        // iconPosition="left"
-                        // iconProps={{ size: 15 }}
-                        // iconClassName="group-hover:rotate-0"
                         onClick={() => handleDelete(camp._id)}
                         className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer"
                       >
                         {" "}
                         <Trash2 size={16} />{" "}
                       </button>
+                      <Link to={`/available-camps/${camp._id}`}>
+                        <button className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer">
+                          {" "}
+                          <EyeIcon size={16} />{" "}
+                        </button>
+                      </Link>
                     </div>
-                    <Link to={`/available-camps/${camp._id}`}>
-                      <button
-                        // label=""
-                        // icon={EyeIcon}
-                        // iconPosition="left"
-                        // iconProps={{ size: 15 }}
-                        // iconClassName="group-hover:rotate-0"
-                        className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer"
-                      >
-                        {" "}
-                        <EyeIcon size={16} />{" "}
-                      </button>
-                    </Link>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </motion.div>
       )}
     </div>
   );

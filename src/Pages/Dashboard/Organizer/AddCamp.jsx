@@ -115,13 +115,13 @@ const AddCamp = () => {
         maxParticipants: Number(maxParticipants),
         duration: Number(duration),
         description,
-        participantCount: Number(participantCount),
+        participantCount: 0 ,
         organizer: {
           name: user?.displayName,
           email: user?.email,
           photo: user?.photoURL,
         },
-        organizerEmail,
+        organizerEmail : user?.email,
         createdAt: new Date().toISOString(),
       };
 
