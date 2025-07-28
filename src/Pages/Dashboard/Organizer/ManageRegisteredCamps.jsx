@@ -34,9 +34,7 @@ const ManageRegisteredCamps = () => {
     queryKey: ["organizerPaidCamps", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        `/organizer/paid-camps/${user.email}`
-      );
+      const res = await axiosSecure.get(`/organizer/paid-camps/${user.email}`);
       return res.data;
     },
   });
@@ -50,9 +48,8 @@ const ManageRegisteredCamps = () => {
   };
 
   const isConfirmed = (registrationId) => {
-    return paymentRecords.some(
-      (p) => p.camp === registrationId && p.confirmationStatus === "Confirmed"
-    );
+    const reg = registeredUsers.find((r) => r._id === registrationId);
+    return reg?.confirmationStatus === "Confirmed";
   };
 
   // ✅ Search + Filter
@@ -130,7 +127,7 @@ const ManageRegisteredCamps = () => {
       if (result.isConfirmed) {
         try {
           const res = await axiosSecure.delete(`/register-camp/${id}`);
-          if (res.data?._id) {
+          if (res.data?.deletedCount > 0) {
             Swal.fire(
               "Cancelled!",
               "The registration has been cancelled.",
