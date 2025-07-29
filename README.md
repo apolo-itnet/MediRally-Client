@@ -31,8 +31,8 @@ Medi Rally is a full-stack web application designed to facilitate the organizati
 1. **Clone the Repositories**
 
    ```bash
-   git clone <client-repo-url>
-   git clone <server-repo-url>
+   git clone < https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-apolo-itnet.git >
+   git clone < https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-apolo-itnet.git >
    ```
 
 2. **Client Side**
