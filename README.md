@@ -182,10 +182,11 @@ This project is inspired by real-world health campaigns. The goal is to simplify
 
 ## 👨‍💻 Developer Info
 
-**Apolo Barua Apurbo**
-💼 MERN Stack Web Developer
-📧 Email: [apolo.itnet@gmail.com](mailto:apolo.itnet@gmail.com)
-📍 Location: Bangladesh
+### 👨‍💻 Developer Info
+**Apolo Barua Apurbo**   <br> 
+💼 MERN Stack Web Developer  <br> 
+📧 **Email**: apolo.itnet@gmail.com  <br> 
+📍 **Location**: Bangladesh  <br> 
 
 ---
 
