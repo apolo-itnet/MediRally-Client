@@ -49,10 +49,10 @@ const ManageCamps = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 lexend text-xs">
-      <h2 className="text-3xl font-bold text-center mb-8 text-rose-500">
+    <div className="w-full place-content-start px-4 py-8 lexend text-xs">
+      {/* <h2 className="text-3xl font-bold text-center mb-8 text-rose-500">
         Manage Your Camps
-      </h2>
+      </h2> */}
 
       {camps.length === 0 ? (
         <div className="text-center py-12">
@@ -62,51 +62,54 @@ const ManageCamps = () => {
           </Link>
         </div>
       ) : (
-        <motion.div {...slideUp(0.1)}className="overflow-x-auto bg-white rounded-lg shadow">
-          <table  className="table w-full">
+        <motion.div
+          {...slideUp(0.1)}
+          className="overflow-x-auto bg-white rounded-lg shadow"
+        >
+          <table className="table text-sm">
             {/* Table Head */}
             <thead className="bg-gray-50 text-gray-700">
-              <tr>
+              <tr className="text-xs">
                 <th className="py-3 px-4 text-left">Sl</th>
                 <th className="py-3 px-4 text-left">Camp Name</th>
                 <th className="py-3 px-4 text-left">Date & Time</th>
                 <th className="py-3 px-4 text-left">Location</th>
                 <th className="py-3 px-4 text-left">Healthcare Professional</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
 
             {/* Table Body */}
-            <tbody className="divide-y divide-gray-200 relative">
+            <tbody className="relative divide-y divide-gray-300 text-xs">
               {camps.map((camp) => (
                 <tr key={camp._id} className="hover:bg-gray-50 overflow-auto">
-                  <td className="py-4 px-4">{camps.indexOf(camp) + 1}</td>
-                  <td className="py-4 px-4 ">{camp.campName}</td>
-                  <td className="py-4 px-4">
-                    <div>
+                  <td className=" px-4">{camps.indexOf(camp) + 1}</td>
+                  <td className=" px-4 ">{camp.campName}</td>
+                  <td className=" px-4">
+                    <div className="">
                       <p>{new Date(camp.eventDateTime).toLocaleDateString()}</p>
                       <p>{new Date(camp.eventDateTime).toLocaleTimeString()}</p>
                     </div>
                   </td>
-                  <td className="py-4 px-4">{camp.venue}</td>
-                  <td className="py-4 px-4">{camp.doctorName}</td>
-                  <td className="py-4 px-4">
+                  <td className=" px-4">{camp.venue}</td>
+                  <td className=" px-4">{camp.doctorName}</td>
+                  <td className=" px-4">
                     <div className="flex justify-center items-center gap-2">
                       <Link to={`/dashboard/organizer/update-camp/${camp._id}`}>
-                        <button className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer">
+                        <button className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer w-10 h-10">
                           {" "}
                           <Edit size={16} />{" "}
                         </button>
                       </Link>
                       <button
                         onClick={() => handleDelete(camp._id)}
-                        className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer"
+                        className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer w-10 h-10"
                       >
                         {" "}
                         <Trash2 size={16} />{" "}
                       </button>
                       <Link to={`/available-camps/${camp._id}`}>
-                        <button className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer">
+                        <button className="bg-pink-700 p-3 rounded-full text-white hover:bg-pink-800 transition-all duration-300 ease-in-out cursor-pointer w-10 h-10">
                           {" "}
                           <EyeIcon size={16} />{" "}
                         </button>

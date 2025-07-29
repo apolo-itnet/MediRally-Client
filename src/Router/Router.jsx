@@ -1,5 +1,5 @@
 import React from "react";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 
 //Layout
 import MainLayout from "../Layouts/MainLayout";
@@ -34,9 +34,7 @@ import ContactUs from "../Pages/ContactUs";
 import Feedback from "../Pages/Dashboard/Participant/Feedback";
 import UpdateCamps from "../Pages/Dashboard/Organizer/UpdateCamps";
 import PaymentHistory from "../Pages/Dashboard/Participant/PaymentHistory";
-
-
-
+import Analytics from "../Pages/Dashboard/Participant/Analytics";
 
 const Router = createBrowserRouter([
   {
@@ -82,14 +80,16 @@ const Router = createBrowserRouter([
       </PrivateRoutes>
     ),
     children: [
-      {
-        index: true,
-        element: <DashboardHome />, 
-      },
       // Organizer Routes
+
       {
         path: "organizer",
         children: [
+          {
+            index: true,
+            path: "dashboard",
+            element: <DashboardHome />,
+          },
           {
             path: "profile",
             element: (
@@ -118,7 +118,7 @@ const Router = createBrowserRouter([
             path: "update-camp/:id",
             element: (
               <RoleRoutes role="Organizer">
-                <UpdateCamps/>
+                <UpdateCamps />
               </RoleRoutes>
             ),
           },
@@ -137,6 +137,22 @@ const Router = createBrowserRouter([
         path: "participant",
         children: [
           {
+            index: true,
+            element: (
+              <RoleRoutes role="Participant">
+                <Analytics />
+              </RoleRoutes>
+            ),
+          },
+          {
+            path: "analytics",
+            element: (
+              <RoleRoutes role="Participant">
+                <Analytics />
+              </RoleRoutes>
+            ),
+          },
+          {
             path: "profile",
             element: (
               <RoleRoutes role="Participant">
@@ -148,7 +164,7 @@ const Router = createBrowserRouter([
             path: "feedback",
             element: (
               <RoleRoutes role="Participant">
-                <Feedback/>
+                <Feedback />
               </RoleRoutes>
             ),
           },

@@ -52,7 +52,7 @@ const AvailableCamps = () => {
         </div>
 
         {/* 🔽 Sorting Dropdown */}
-        <div className="flex items-center gap-4 ">
+        <div className="flex justify-between items-center gap-4 ">
           <select
             onChange={(e) => setSortBy(e.target.value)}
             className="border-transparent px-3 py-2 rounded-md shadow-sm cursor-pointer"
@@ -68,7 +68,7 @@ const AvailableCamps = () => {
             onClick={() => setGridCols(gridCols === 3 ? 2 : 3)}
             className="border-transparent px-3 py-2 rounded-md shadow-sm"
           >
-            {gridCols === 3 ? <Rows2 size={20} /> : <Rows3 size={20} />}
+            {gridCols === 3 ? <Rows2 size={20} className="text-rose-500" /> : <Rows3 size={20} className="text-rose-500" />}
           </button>
         </div>
       </div>

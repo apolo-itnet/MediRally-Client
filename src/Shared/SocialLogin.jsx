@@ -22,7 +22,7 @@ const SocialLogin = ({ from }) => {
   return (
     <div>
       {/* Social Login Button */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 font-light lexend text-xs">
         {/* Google */}
         <button onClick={handleGoogleLogin} className="btn py-5 bg-transparent">
           <img

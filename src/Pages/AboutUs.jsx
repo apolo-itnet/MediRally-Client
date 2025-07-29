@@ -3,7 +3,7 @@ import { fadeUp, slideDown } from "../Utility/animation";
 
 const AboutUs = () => {
   return (
-    <div className="relative h-[calc(100vh-80px)] bg-base-100 px-4 py-16 flex flex-col items-center justify-start lexend ">
+    <div className="relative lg:h-[calc(100vh-80px)] bg-base-100 px-4 py-16 flex flex-col items-center justify-start lexend ">
       <motion.h1
         {...slideDown(0)}
         className="text-4xl md:text-5xl font-bold text-center text-rose-500 mb-10"

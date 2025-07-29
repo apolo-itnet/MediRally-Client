@@ -1,8 +1,7 @@
-// Login.jsx
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation, Link } from "react-router";
 import { Mail, LockKeyhole, Eye, EyeOff, Loader2 } from "lucide-react";
 import useAuth from "../Hooks/useAuth";
 import { toastError, toastSuccess } from "../Utility/toastmsg";
@@ -51,21 +50,21 @@ const SignIn = () => {
   };
 
   const inputStyle =
-    "flex items-center gap-3 px-4 py-3 bg-transparent rounded-lg border border-gray-200 transition duration-500 focus-within:border-fuchsia-800/50  outline-none w-full text-gray-700 placeholder:text-gray-500";
+    "input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300";
 
   const labelStyle = "label-text font-medium flex items-center gap-2";
 
   return (
-    <div className="h-screen[calc(100vh-80px)] flex flex-col md:flex-row items-center justify-center gap-10 px-4 py-12 bg-base-100">
+    <div className="lg:h-[calc(100vh-80px)] flex flex-col md:flex-row items-center justify-center gap-10 px-4 py-12 bg-base-100 lexend text-xs">
       {/* Left Content */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center md:text-left md:w-1/2 space-y-5"
+        className="text-center md:text-left md:w-lg space-y-5"
       >
-        <h2 className="text-4xl font-bold text-primary">Welcome Back</h2>
-        <p className="text-lg text-base-content">
+        <h2 className="text-6xl font-bold text-rose-500">Welcome Back</h2>
+        <p className="text-base-content">
           Log in to access your account and continue enjoying our platform.
         </p>
       </motion.div>
@@ -78,7 +77,6 @@ const SignIn = () => {
         transition={{ duration: 0.6 }}
         className="md:w-1/2 bg-white p-6 rounded-xl shadow-lg space-y-4 w-full max-w-md"
       >
-
         {/* Google Login */}
         <SocialLogin handleGoogleLogin={handleGoogleLogin} />
 
@@ -128,6 +126,28 @@ const SignIn = () => {
           {errors.password && (
             <p className="text-error text-sm mt-1">{errors.password.message}</p>
           )}
+        </div>
+
+        <div className="flex justify-between items-center gap-2 py-2">
+          <p className="text-xs">
+            <Link href="/forgot-password" className="text-rose-500">
+              Forgot Password?
+            </Link>
+          </p>
+          <div>
+            <span className="text-xs font-medium underline ">
+              Don't have an account?
+            </span>
+            <span>
+              <Link
+                to={"/signup"}
+                className="text-rose-500 text-xs pl-1 uppercase"
+              >
+                {" "}
+                Sign up{" "}
+              </Link>
+            </span>
+          </div>
         </div>
 
         {/* Submit */}

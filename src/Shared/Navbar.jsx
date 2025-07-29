@@ -21,7 +21,7 @@ import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
-  const { user, SignOut } = use(AuthContext);
+  const { user, userRole, SignOut } = use(AuthContext);
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -63,8 +63,15 @@ const Navbar = () => {
     { label: "Contact", href: "/contact", icon: <FaAddressBook /> },
   ];
 
+  const dashboardPath =
+    userRole === "Organizer"
+      ? "/dashboard/organizer/profile"
+      : userRole === "Participant"
+      ? "/dashboard/participant/analytics"
+      : "/dashboard";
+
   const privateLinks = [
-    { label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard /> },
+    { label: "Dashboard", href: dashboardPath, icon: <LayoutDashboard /> },
   ];
 
   return (
@@ -185,7 +192,7 @@ const Navbar = () => {
                 alt="logo"
                 className="w-8 h-8"
               />
-             
+
               <h1 className="zain opacity-80 flex gap-4">
                 <span className="text-4xl font-black text-rose-500">
                   Medi Rally

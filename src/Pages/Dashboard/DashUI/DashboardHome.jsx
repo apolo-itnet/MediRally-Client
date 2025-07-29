@@ -14,10 +14,10 @@ const DashboardHome = () => {
           Hello {user?.displayName}
         </motion.p>
         <motion.h1 {...slideRight(0.6)} className="text-4xl font-bold text-zinc-500 lexend">
-          Welcome to your dashboard
+          Welcome to your 
         </motion.h1>
-        <motion.h1 {...slideRight(0.6)} className="text-4xl font-bold text-zinc-500 lexend">
-          {userRole}
+        <motion.h1 {...slideRight(0.6)} className="text-4xl font-bold text-zinc-600 lexend">
+          {userRole} dashboard
         </motion.h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-10">

@@ -13,7 +13,7 @@ import axios from "axios";
 import { toastError, toastSuccess } from "../Utility/toastmsg";
 import useAuth from "../Hooks/useAuth";
 import SecondaryBtn from "../Shared/Button/SecondaryBtn";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { slideLeft, slideRight } from "../Utility/animation";
 
 const SignUp = () => {
@@ -73,19 +73,21 @@ const SignUp = () => {
   };
 
   const inputStyle =
-    "flex items-center gap-3 px-4 py-3 bg-transparent rounded-lg border border-gray-200 transition duration-500 focus-within:border-fuchsia-800/50  outline-none w-full text-gray-700 placeholder:text-gray-500";
+    "input input-bordered w-full focus:outline-none focus:border-rose-500 focus:ring-rose-500 transition-all duration-300 ease-in-out text-sm";
 
   const labelStyle = "label-text font-medium flex items-center gap-2";
 
   return (
-    <div className="h-screen[calc(100vh-80px)] flex flex-col md:flex-row items-center justify-center gap-10 px-4 py-12 bg-base-100 nunito">
+    <div className="h-screen[calc(100vh-80px)] flex flex-col md:flex-row items-center justify-center gap-10 px-4 py-12 bg-base-100 lexend text-xs res-pad">
       {/* Left Content */}
       <motion.div
         {...slideRight(0)}
-        className="text-center md:text-left md:w-1/2 space-y-5"
+        className="text-center md:text-left lg:w-md space-y-5"
       >
-        <h2 className="text-4xl font-bold text-primary">Create Your Account</h2>
-        <p className="text-lg text-base-content">
+        <h2 className="text-3xl md:text-6xl font-bold text-rose-500">
+          Create Your Account
+        </h2>
+        <p className="md:w-md text-sm text-base-content">
           Join our community and start your journey with exclusive benefits. It
           only takes a minute to sign up!
         </p>
@@ -95,7 +97,7 @@ const SignUp = () => {
       <motion.form
         {...slideLeft(0.2)}
         onSubmit={handleSubmit(onSubmit)}
-        className="md:w-1/2 bg-white p-6 rounded-xl shadow-lg space-y-4 w-full max-w-md"
+        className="md:w-1/2 bg-white p-6 rounded-xl shadow-md space-y-4 w-full max-w-md"
       >
         {/* Full Name */}
         <div className="form-control">
@@ -156,7 +158,7 @@ const SignUp = () => {
                 type="radio"
                 value="Organizer"
                 {...register("role", { required: "Role is required" })}
-                className="radio radio-primary"
+                className="radio text-rose-500"
               />
               <span>Organizer</span>
             </label>
@@ -165,7 +167,7 @@ const SignUp = () => {
                 type="radio"
                 value="Participant"
                 {...register("role", { required: "Role is required" })}
-                className="radio radio-primary"
+                className="radio text-rose-500"
               />
               <span>Participant</span>
             </label>
@@ -246,6 +248,21 @@ const SignUp = () => {
               {errors.confirmPassword.message}
             </p>
           )}
+        </div>
+
+        <div>
+          <span className="text-xs font-medium underline ">
+            Already have an account?
+          </span>
+          <span>
+            <Link
+              to={"/signin"}
+              className="text-rose-500 text-xs pl-1 uppercase"
+            >
+              {" "}
+              sign in{" "}
+            </Link>
+          </span>
         </div>
 
         {/* Image Upload */}

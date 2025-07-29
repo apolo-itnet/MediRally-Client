@@ -64,7 +64,7 @@ const CampCard = ({ camp }) => {
 
           <div>
             <p className=" text-gray-400 py-2 pr-2">
-              {camp.description?.slice(0, 100)}...
+              {camp.description?.slice(0, 90)}...
             </p>
           </div>
         </div>

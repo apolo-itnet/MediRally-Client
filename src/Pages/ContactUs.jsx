@@ -6,7 +6,7 @@ import SecondaryBtn from "../Shared/Button/SecondaryBtn";
 
 const ContactUs = () => {
   return (
-    <div className="relative h-[calc(100vh-80px)] bg-base-100 px-4 py-16 lexend">
+    <div className="relative lg:h-[calc(100vh-80px)] bg-base-100 px-4 py-16 lexend">
       <motion.h1
         {...slideDown(0)}
         className="text-4xl md:text-5xl font-bold text-center text-rose-500 mb-4"

@@ -40,7 +40,11 @@ export default function Sidebar({ isOpen, onClose }) {
   ];
 
   const PartNavLinks = [
-    { label: "Analytics", href: "/dashboard", icon: <LayoutDashboard /> },
+    {
+      label: "Analytics",
+      href: "/dashboard/participant/analytics",
+      icon: <LayoutDashboard />,
+    },
     {
       label: "Registered Camps",
       href: "/dashboard/participant/registered-camps",

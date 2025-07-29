@@ -28,11 +28,11 @@ const FeedbackSection = () => {
   if (isError) return <div className="text-center py-10 text-red-500">Failed to load feedback</div>;
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white lexend text-sm font-light">
       <div className="container mx-auto px-4">
         <motion.h2
           {...slideRight(0.1)}
-          className="text-3xl font-bold text-center mb-8"
+          className="text-3xl md:text-6xl font-bold text-center mb-8"
         >
           What Our Patients Say
         </motion.h2>
@@ -48,18 +48,19 @@ const FeedbackSection = () => {
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
+          className="mySwiper h-92 group"
         >
           {feedbacks.map((fb) => (
-            <SwiperSlide key={fb._id}>
+            <SwiperSlide key={fb._id} className="py-16">
               <motion.div
                 {...slideRight(0.1)}
-                className="rounded-2xl bg-gray-50 shadow-md p-6 h-full flex flex-col gap-4"
+                className="rounded-2xl bg-gray-50 shadow-md p-6 h-full flex flex-col gap-4 group"
               >
                 <div className="flex items-center gap-4">
                   <img
                     src={fb.userPhoto || "/default-user.png"}
                     alt={fb.userName}
-                    className="w-14 h-14 rounded-full object-cover border"
+                    className="w-14 h-14 rounded-full object-cover border border-zinc-300 p-1 hover:border-rose-500 transition-colors duration-300 ease-in-out "
                   />
                   <div>
                     <h3 className="text-lg font-semibold">{fb.userName}</h3>
@@ -73,7 +74,7 @@ const FeedbackSection = () => {
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-700 line-clamp-5">"{fb.feedbackText}"</p>
+                <p className="text-gray-700 text-sm leading-6">{fb.feedbackText}"</p>
               </motion.div>
             </SwiperSlide>
           ))}

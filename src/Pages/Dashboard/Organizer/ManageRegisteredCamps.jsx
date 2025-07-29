@@ -194,10 +194,10 @@ const ManageRegisteredCamps = () => {
               <th className="px-4 py-2">Joined</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="relative divide-y divide-gray-300">
             {paginatedCamps.map((reg, idx) => (
-              <tr key={reg._id} className="border-t">
-                <td className="px-4 py-2">
+              <tr key={reg._id} className=" hover:bg-gray-50">
+                <td className="px-4">
                   {(currentPage - 1) * itemsPerPage + idx + 1}
                 </td>
                 <td className="px-4 py-2">{reg.campName}</td>

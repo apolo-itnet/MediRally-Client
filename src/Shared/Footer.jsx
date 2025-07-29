@@ -51,7 +51,7 @@ const Footer = () => {
           </motion.div>
 
           <motion.div {...slideUp(0.2)} className="flex flex-col">
-            <div className="flex flex-col md:my-8 md:flex-row justify-between py-2">
+            <div className="flex flex-col md:my-8 md:flex-row justify-between py-2 gap-4">
               <div className="logo self-center">
                 <SecondaryBtn
                   label="Contact US"
@@ -61,7 +61,7 @@ const Footer = () => {
               </div>
 
               <div className="navMenu self-start md:self-end lg:justify-self-end">
-                <ul className="text-sm font-medium flex flex-col md:flex-row md:items-center gap-3">
+                <ul className="w-full text-sm font-medium flex flex-col md:flex-row md:items-center items-start gap-3">
                   {footerLinks.map((link, index) => (
                     <li key={index}>
                       <NavLink
@@ -90,7 +90,7 @@ const Footer = () => {
                 </ul>
               </div>
 
-              <div className="social-icon self-center justify-self-end py-4">
+              <div className="social-icon self-center justify-self-end pb-4">
                 <ul className="flex flex-row md:items-center gap-4">
                   {socials.map((item, index) => (
                     <li key={index} className="cursor-pointer bg-transparent">
