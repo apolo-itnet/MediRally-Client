@@ -166,11 +166,26 @@ Create a seamless platform for:
 
 Add screenshots for:
 
-* Homepage
-* Camp details page
-* Participant dashboard
-* Organizer dashboard
-* Payment and feedback UI
+
+🏠 Homepage
+<img align="center" src="https://i.postimg.cc/x15dQNzp/home-page.png" /> 
+
+📄 All Camp Page
+<img align="center" src="https://i.postimg.cc/3xYwzFdD/all-camps-page.png" /> 
+
+📄 Camp Details Page
+<img align="center" src="https://i.postimg.cc/15ptWj5Q/camp-details-page.png" /> 
+
+
+👤 Participant Dashboard
+
+
+
+🧑‍⚕️ Organizer Dashboard
+
+
+
+💳 Payment & Feedback
 
 ---
 
