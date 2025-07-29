@@ -166,26 +166,19 @@ Create a seamless platform for:
 
 Add screenshots for:
 
+## 🖼️ Project Screenshots
 
-🏠 Homepage
-<img align="center" src="https://i.postimg.cc/x15dQNzp/home-page.png" /> 
+| Homepage | Camp Details |
+|----------|--------------|
+| ![Homepage](https://i.postimg.cc/x15dQNzp/home-page.png) | ![Camp Details](https://i.postimg.cc/15ptWj5Q/camp-details-page.png) |
 
-📄 All Camp Page
-<img align="center" src="https://i.postimg.cc/3xYwzFdD/all-camps-page.png" /> 
+|   Organizer Dashboard | Participant Dashboard |
+|-----------------------|-----------------------|
+| ![Organizer](https://i.postimg.cc/MZfXBGCX/organizer-dashboard.png) | ![Participant](https://i.postimg.cc/RVrhLBmd/participant-dashboard.png) |
 
-📄 Camp Details Page
-<img align="center" src="https://i.postimg.cc/15ptWj5Q/camp-details-page.png" /> 
-
-
-👤 Participant Dashboard
-
-
-
-🧑‍⚕️ Organizer Dashboard
-
-
-
-💳 Payment & Feedback
+| Payment | Feedback |
+|---------|----------|
+| ![Payment](https://i.postimg.cc/mDJDqxHb/payment.png) |  ![Feedback](https://i.postimg.cc/hvmjRCLV/feedback.png) |
 
 ---
 
