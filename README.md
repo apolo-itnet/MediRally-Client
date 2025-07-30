@@ -133,7 +133,6 @@ Create a seamless platform for:
 
 * Organizers: Create, Read, Update, Delete camps
 * Participants: Register, Cancel camp, Provide feedback
-* Admin: Manual organizer role setup
 
 ---
 
@@ -155,16 +154,12 @@ Create a seamless platform for:
 
 ## 🎁 Bonus Features
 
-* AOS animations & smooth UI transitions
+* Framer Motion animations & smooth UI transitions
 * Custom layout switching button for camps grid view
 * Custom dashboard chart using Recharts
 * Toast notifications and confirmation dialogs
 
 ---
-
-## 🖼️ Project Screenshots
-
-Add screenshots for:
 
 ## 🖼️ Project Screenshots
 
@@ -196,7 +191,7 @@ This project is inspired by real-world health campaigns. The goal is to simplify
 
 ---
 
-## ✅ Suggested Improvements (Optional)
+## ✅ Feature Improvements - 
 
 * Add Admin Role & Analytics
 * OTP email verification for login security
