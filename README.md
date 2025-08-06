@@ -1,4 +1,4 @@
-# Medi Rally - Medical Campaign Platform
+# Medi Rally - Campaign Platform
 
 Medi Rally is a full-stack web application designed to facilitate the organization, registration, and management of medical camps. It serves as a platform for healthcare organizers to promote their services and for participants to discover and join impactful health camps.
 
@@ -7,8 +7,8 @@ Medi Rally is a full-stack web application designed to facilitate the organizati
 ## 🔗 Live Links
 
 * **Live Site**: https://medi-rally.web.app <br>
-* **Client Repo**: https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-apolo-itnet.git <br>
-* **Server Repo**: https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-apolo-itnet.git <br>
+* **Client Repo**: https://github.com/apolo-itnet/MediRally-Client <br>
+* **Server Repo**: https://github.com/apolo-itnet/MediRally-Server <br>
 
 ---
 
@@ -31,8 +31,8 @@ Medi Rally is a full-stack web application designed to facilitate the organizati
 1. **Clone the Repositories**
 
    ```bash
-   git clone < https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-apolo-itnet.git >
-   git clone < https://github.com/Programming-Hero-Web-Course4/b11a12-server-side-apolo-itnet.git >
+   git clone < https://github.com/apolo-itnet/MediRally-Client.git >
+   git clone < https://github.com/apolo-itnet/MediRally-Server.git >
    ```
 
 2. **Client Side**
